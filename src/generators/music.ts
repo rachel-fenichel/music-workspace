@@ -40,17 +40,17 @@ export class MusicGenerator extends Blockly.CodeGenerator {
 
         let outputString = '';
         if (statementInputs.length) {
-            outputString += `opening(${nestingLevel})\n`;
+            outputString += `playOpening(${nestingLevel})\n`;
             for (const inputName of statementInputs) {
                 const input = block.getInput(inputName);
                 if (input && input.connection?.isConnected()) {
                     outputString += this.musicBlockToCode(input.connection.targetBlock(), nestingLevel + 1);
                 }
             }
-            outputString += `closing(${nestingLevel})\n`;
+            outputString += `playClosing(${nestingLevel})\n`;
         }
         else if (block.previousConnection && block.nextConnection) {
-            outputString = `stackBlock(${nestingLevel})\n`;
+            outputString = `playBlock(${nestingLevel})\n`;
         }
     const nextBlock =
       block.nextConnection && block.nextConnection.targetBlock();
