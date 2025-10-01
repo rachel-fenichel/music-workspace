@@ -6,15 +6,16 @@
 
 import * as Blockly from 'blockly';
 import {blocks} from './blocks/text';
-import {forBlock} from './generators/javascript';
-import {javascriptGenerator} from 'blockly/javascript';
+//import {forBlock} from './generators/javascript';
+//import {javascriptGenerator} from 'blockly/javascript';
 import {save, load} from './serialization';
 import {toolbox} from './toolbox';
 import './index.css';
+import { musicGenerator } from './generators/music';
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
-Object.assign(javascriptGenerator.forBlock, forBlock);
+//Object.assign(javascriptGenerator.forBlock, forBlock);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode')?.firstChild;
@@ -30,12 +31,12 @@ const ws = Blockly.inject(blocklyDiv, {toolbox});
 // generated code from the workspace, and evals the code.
 // In a real application, you probably shouldn't use `eval`.
 const runCode = () => {
-  const code = javascriptGenerator.workspaceToCode(ws as Blockly.Workspace);
+  const code = musicGenerator.workspaceToCode(ws as Blockly.Workspace);
   if (codeDiv) codeDiv.textContent = code;
 
-  if (outputDiv) outputDiv.innerHTML = '';
+  //if (outputDiv) outputDiv.innerHTML = '';
 
-  eval(code);
+  //eval(code);
 };
 
 if (ws) {
