@@ -1,3 +1,7 @@
+name: Upload Pages
+
+on: [push]
+
 jobs:
   # Build job
   build:
