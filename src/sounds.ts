@@ -29,61 +29,14 @@ export function initializeSynth() {
     }
 }
 
-
-/**
- * The core function to play middle C (C4).
- * This function first ensures the AudioContext is started.
- */
-function playMiddleC() {
-    // 1. Start the AudioContext (required by most browsers on user gesture)
-    if (Tone.context.state !== 'running') {
-        Tone.start().then(() => {
-            console.log('Audio context started. Playing C4...')
-            triggerNote();
-        }).catch(err => {
-            console.log('Error starting audio context.');
-            console.error("Failed to start Tone.js context:", err);
-        });
-    } else {
-        console.log('Playing C4...');
-        triggerNote();
-    }
-}
-
-/**
- * Triggers the note on the initialized synthesizer.
- */
-export function triggerNote() {
-    // Ensure the synth is initialized
-    initializeSynth();
-
-    // Note: "C4" is Middle C. "8n" is an eighth note duration.
-    const note = "C4";
-    const duration = "8n";
-
-    // Trigger the note
-    synth?.triggerAttackRelease(note, duration);
-
-    console.log(`Played note: ${note} for duration ${duration}`);
-}
-
-
-export function playNote(note: string, duration: string) {
-    // Trigger the note
-    synth?.triggerAttackRelease(note, duration);
-
-    console.log(`Played note: ${note} for duration ${duration}`);
-}
-
 export function playSequence(notes: (string | string[])[]) {
-    const subdivision = '4n';
+    const subdivision = '2n';
     // Calculate the total duration of the sequence (3 notes)
     const durationInSeconds = Tone.Time(subdivision).toSeconds();
     // Add a small buffer (e.g., 0.05s) to ensure the final note's release completes before stopping.
     const totalDuration = durationInSeconds * notes.length + 0.05;
     const sequence = new Tone.Sequence(function (time, note) {
         synth?.triggerAttackRelease(note, subdivision);
-        //straight quarter notes
     }, notes, subdivision);
     sequence.loop = false;
     sequence.start(0);

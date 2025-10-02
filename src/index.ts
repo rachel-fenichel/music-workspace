@@ -6,21 +6,17 @@
 
 import * as Blockly from 'blockly';
 import { blocks } from './blocks/text';
-//import {forBlock} from './generators/javascript';
-//import {javascriptGenerator} from 'blockly/javascript';
 import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { musicGenerator } from './generators/music';
-import { triggerNote, initializeSynth, playNote, playSequence } from './sounds';
+import { initializeSynth, playSequence } from './sounds';
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
-//Object.assign(javascriptGenerator.forBlock, forBlock);
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode')?.firstChild;
-const outputDiv = document.getElementById('output');
 const blocklyDiv = document.getElementById('blocklyDiv');
 
 if (!blocklyDiv) {
@@ -31,19 +27,15 @@ const ws = Blockly.inject(blocklyDiv, { toolbox });
 // This function resets the code and output divs, shows the
 // generated code from the workspace, and evals the code.
 // In a real application, you probably shouldn't use `eval`.
-const runCode = () => {
+const genCode = () => {
   const code = musicGenerator.workspaceToCode(ws as Blockly.Workspace);
   if (codeDiv) codeDiv.textContent = code;
-
-  //if (outputDiv) outputDiv.innerHTML = '';
-
-  //eval(code);
 };
 
 if (ws) {
   // Load the initial state from storage and run the code.
   load(ws);
-  runCode();
+  genCode();
 
   // Every time the workspace changes state, save the changes to storage.
   ws.addChangeListener((e: Blockly.Events.Abstract) => {
@@ -65,47 +57,50 @@ if (ws) {
     ) {
       return;
     }
-    runCode();
+    genCode();
   });
 }
 
 let sequence: (string | string[])[] = [];
 export function playOpening(nestingLevel: number) {
-  sequence.push(['C4', 'E4', 'G4', 'C5']);  
-  //playNote('G4', '8n');
+  if (nestingLevel == 0) {
+    sequence.push(['C4', 'E4', 'G4', 'C5']);
+  } else if (nestingLevel == 1) {
+    sequence.push(['D4', 'F4', 'B4', 'D5']);
+  } else {
+    sequence.push('A2');
+  }
 }
 
 export function playClosing(nestingLevel: number) {
-  //sequence.push('A4');
-  sequence.push(['C5', 'G4', 'E4', 'C4']);
-    //playNote('A4', '8n');
+  if (nestingLevel == 0) {
+    sequence.push(['C5', 'G4', 'E4', 'C4']);
+  } else if (nestingLevel == 1) {
+    sequence.push(['D5', 'B4', 'F4', 'D4']);
+  } else {
+    sequence.push('A2');
+  }
 }
 
 export function playBlock(nestingLevel: number) {
   if (nestingLevel == 0) {
-    sequence.push('C4');
+    sequence.push('E5');
   } else if (nestingLevel == 1) {
-    sequence.push('G4');
+    sequence.push('E6');
   } else {
-    sequence.push('A2');
+    sequence.push('E7');
   }
-//playNote('C4', '8n');
 }
 
 export function playBetweenStacks() {
-  sequence.push('C2');  
-  //playNote('C2', '4n');
+  sequence.push('C2');
 }
 
 document.getElementById('play')?.addEventListener('click', () => {
   initializeSynth();
-
-  
   if (codeDiv?.textContent) {
-    // Clear sequence.
     sequence = [];
     eval(codeDiv.textContent);
     playSequence(sequence);
   }
-  //triggerNote();
 });
