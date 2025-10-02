@@ -29,7 +29,9 @@ export function initializeSynth() {
     }
 }
 
-export function playSequence(notes: (string | string[])[]) {
+export function playSequence(notes: (string | string[])[], tempo: number) {
+    Tone.getTransport().bpm.value = tempo;
+
     const subdivision = '2n';
     // Calculate the total duration of the sequence (3 notes)
     const durationInSeconds = Tone.Time(subdivision).toSeconds();
@@ -40,7 +42,6 @@ export function playSequence(notes: (string | string[])[]) {
     }, notes, subdivision);
     sequence.loop = false;
     sequence.start(0);
-
 
     // 2. Schedule the transport to stop and update status at the end
     // We use Tone.Transport.scheduleOnce for precise timing.

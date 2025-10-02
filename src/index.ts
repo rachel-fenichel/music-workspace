@@ -103,11 +103,11 @@ export function playClosing(nestingLevel: number) {
 
 export function playBlock(nestingLevel: number) {
   if (nestingLevel == 0) {
-    sequence.push('E5');
+    sequence.push('C5');
   } else if (nestingLevel == 1) {
-    sequence.push('E6');
+    sequence.push('C6');
   } else {
-    sequence.push('E7');
+    sequence.push('C7');
   }
 }
 
@@ -117,9 +117,11 @@ export function playBetweenStacks() {
 
 document.getElementById('play')?.addEventListener('click', () => {
   initializeSynth();
+  const slider = document.getElementById('tempoSlider') as HTMLInputElement | null;
+  const tempo = slider ? parseInt(slider.value) : 150;
   if (codeDiv?.textContent) {
     sequence = [];
     eval(codeDiv.textContent);
-    playSequence(sequence);
+    playSequence(sequence, tempo);
   }
 });
