@@ -83,7 +83,6 @@ export function playSequence(notes: (string | string[])[]) {
     const totalDuration = durationInSeconds * notes.length + 0.05;
     const sequence = new Tone.Sequence(function (time, note) {
         synth?.triggerAttackRelease(note, subdivision);
-        console.log(note);
         //straight quarter notes
     }, notes, subdivision);
     sequence.loop = false;

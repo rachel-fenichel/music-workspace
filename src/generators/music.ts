@@ -15,7 +15,6 @@ export class MusicGenerator extends Blockly.CodeGenerator {
                 // Value blocks return tuples of code and operator order.
                 // Top-level blocks don't care about operator order.
                 line = line[0];
-                console.log('top level reporter block');
             }
             if (line) {
                 if (block.outputConnection) {
@@ -73,7 +72,6 @@ export class MusicGenerator extends Blockly.CodeGenerator {
             if (input.type === Blockly.inputs.inputTypes.STATEMENT) {
                 // Push the input's name (which is used in statementToCode)
                 statementInputs.push(input.name);
-                console.log('found a statement input');
             }
         }
         return statementInputs;

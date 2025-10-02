@@ -82,7 +82,13 @@ export function playClosing(nestingLevel: number) {
 }
 
 export function playBlock(nestingLevel: number) {
-  sequence.push('C4');
+  if (nestingLevel == 0) {
+    sequence.push('C4');
+  } else if (nestingLevel == 1) {
+    sequence.push('G4');
+  } else {
+    sequence.push('A2');
+  }
 //playNote('C4', '8n');
 }
 
@@ -96,6 +102,8 @@ document.getElementById('play')?.addEventListener('click', () => {
 
   
   if (codeDiv?.textContent) {
+    // Clear sequence.
+    sequence = [];
     eval(codeDiv.textContent);
     playSequence(sequence);
   }
