@@ -29,16 +29,17 @@ export function initializeSynth() {
     }
 }
 
-export function playSequence(notes: (string | string[])[], tempo: number) {
+export function playSequence(notes: (string | (string | null)[])[], tempo: number) {
     Tone.getTransport().bpm.value = tempo;
 
     const subdivision = '2n';
-    // Calculate the total duration of the sequence (3 notes)
     const durationInSeconds = Tone.Time(subdivision).toSeconds();
     // Add a small buffer (e.g., 0.05s) to ensure the final note's release completes before stopping.
     const totalDuration = durationInSeconds * notes.length + 0.05;
     const sequence = new Tone.Sequence(function (time, note) {
-        synth?.triggerAttackRelease(note, subdivision);
+        if (note) {
+            synth?.triggerAttackRelease(note, '4n', time);
+        }
     }, notes, subdivision);
     sequence.loop = false;
     sequence.start(0);

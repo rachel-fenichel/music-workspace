@@ -80,12 +80,12 @@ if (ws) {
   });
 }
 
-let sequence: (string | string[])[] = [];
+let sequence: (string | (string | null)[])[] = [];
 export function playOpening(nestingLevel: number) {
   if (nestingLevel == 0) {
-    sequence.push(['C4', 'E4', 'G4', 'C5']);
+    sequence.push(['C4', 'E4', 'G4', 'C5', null, null]);
   } else if (nestingLevel == 1) {
-    sequence.push(['D4', 'F4', 'B4', 'D5']);
+    sequence.push(['D4', 'F4', 'B4', 'D5', null, null]);
   } else {
     sequence.push('A2');
   }
@@ -93,9 +93,9 @@ export function playOpening(nestingLevel: number) {
 
 export function playClosing(nestingLevel: number) {
   if (nestingLevel == 0) {
-    sequence.push(['C5', 'G4', 'E4', 'C4']);
+    sequence.push(['C5', 'G4', 'E4', 'C4', null, null]);
   } else if (nestingLevel == 1) {
-    sequence.push(['D5', 'B4', 'F4', 'D4']);
+    sequence.push(['D5', 'B4', 'F4', 'D4', null, null]);
   } else {
     sequence.push('A2');
   }
