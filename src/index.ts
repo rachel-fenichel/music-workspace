@@ -5,15 +5,34 @@
  */
 
 import * as Blockly from 'blockly';
-import { blocks } from './blocks/text';
 import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { musicGenerator } from './generators/music';
 import { initializeSynth, playSequence } from './sounds';
+// @ts-expect-error No types in js file
+import { blocks } from './blocks/p5_blocks';
+// @ts-expect-error No types in js file
+import { load as loadTestBlocks } from './loadTestBlocks';
+import { installAllBlocks as installColourBlocks } from '@blockly/field-colour';
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
+installColourBlocks();
+
+const params = new URLSearchParams(window.location.search);
+
+const scenarioParam = params.get('scenario');
+const scenario = scenarioParam ?? 'simpleCircle';
+
+// Update form inputs to match params, but only after the page is
+// fully loaded as Chrome (at least) tries to restore previous form
+// values and does so _after_ DOMContentLoaded has fired, which can
+// result in the form inputs being out-of-sync with the actual
+// options when doing browser page navigation.
+window.addEventListener('load', () => {
+  (document.getElementById('scenario') as HTMLSelectElement).value = scenario;
+});
 
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode')?.firstChild;
@@ -34,7 +53,7 @@ const genCode = () => {
 
 if (ws) {
   // Load the initial state from storage and run the code.
-  load(ws);
+  loadTestBlocks(ws, scenario);
   genCode();
 
   // Every time the workspace changes state, save the changes to storage.
