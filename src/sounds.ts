@@ -58,7 +58,6 @@ export function playSequence(notes: (string | (string | null)[])[], tempo: numbe
     Tone.Transport.start();
     console.log(`Starting Transport. Total duration: ${totalDuration.toFixed(2)}s`);
 }
-// New section for using Part instead of Sequence.
 
 // The data structure for the notes must be updated to be compatible with Tone.Part
 // We will use an array of objects where each object contains a time, note, and duration.
@@ -66,7 +65,7 @@ export function playSequence(notes: (string | (string | null)[])[], tempo: numbe
 interface NoteEvent {
     time: string; // Tone.js time format (e.g., '0:0:0', '0:0:1', '0:1:0')
     note: string | string[] | null;
-    duration: string; // Optional duration for the note
+    duration: string;
 }
 
 interface PartWithDuration {
@@ -76,10 +75,9 @@ interface PartWithDuration {
 let partList: PartWithDuration[] = [];
 
 function createPartEvents(notes: (string | null)[], sixteenthsDur: number): NoteEvent[] {
-    // 1. Convert the array of notes/chords into an array of NoteEvent objects
     return notes.map((note, index) => {
-        // Calculate the 'time' for this event in measures:beats:sixteenths format
-        const time = `0:0:${index * sixteenthsDur}`; // Time is in 'measure:beat:sixteenth' format.
+        // Calculate the trigger time for this event in measures:beats:sixteenths format
+        const time = `0:0:${index * sixteenthsDur}`;
 
         return {
             time: time,
@@ -100,7 +98,6 @@ function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number)
 
     let duration = sixteenthsDur * (notes.length);
     let durationString = `0:0:${duration}`;
-    console.log('duration was ' + duration);
 
     return { part, duration: durationString };
 }
@@ -119,27 +116,11 @@ function playPartsFromList() {
     transport.scheduleOnce(() => {
         transport.stop();
         transport.position = 0; // Reset position for next play.
-        console.log('Arpeggio finished.');
     }, elapsedTime);
 
     transport.start();
 }
 
-function createOpening(nestingLevel: number) {
-    let notes = ['C4', 'E4', 'G4', 'C5', null];
-    // Duration of each note, in sixteenths.
-    const sixteenthsDuration = 1;
-    partList = [];
-
-    partList.push(createPartWithDuration(notes, sixteenthsDuration));
-    let downNotes = notes.reverse();
-    partList.push(createPartWithDuration(downNotes, sixteenthsDuration));
-
-}
-
-//
-
-let sequence: (string | (string | null)[])[] = [];
 export function playOpening(nestingLevel: number) {
     let notes = [];
     if (nestingLevel == 0) {
@@ -177,18 +158,20 @@ export function playBlock(nestingLevel: number) {
 }
 
 export function playBetweenStacks() {
-    partList.push(createPartWithDuration(['C2'], 4));
+    partList.push(createPartWithDuration(['C2', 'E2'], 4));
+}
+
+function updateTempo() {
+    const slider = document.getElementById('tempoSlider') as HTMLInputElement | null;
+    const tempo = slider ? parseInt(slider.value) : 150;
+    Tone.getTransport().bpm.value = tempo;
 }
 
 export function playProgram(programText: string) {
     initializeSynth();
-    const slider = document.getElementById('tempoSlider') as HTMLInputElement | null;
-    const tempo = slider ? parseInt(slider.value) : 150;
-    Tone.getTransport().bpm.value = tempo;
-    sequence = [];
+    updateTempo();
     partList = [];
+    // Shoves items into the parts list.
     eval(programText);
-    //playSequence(sequence, tempo);
-    //createOpening(0);
     playPartsFromList();
 }
