@@ -58,6 +58,107 @@ export function playSequence(notes: (string | (string | null)[])[], tempo: numbe
     Tone.Transport.start();
     console.log(`Starting Transport. Total duration: ${totalDuration.toFixed(2)}s`);
 }
+// New section for using Part instead of Sequence.
+
+// The data structure for the notes must be updated to be compatible with Tone.Part
+// We will use an array of objects where each object contains a time, note, and duration.
+// The time will be calculated based on the position in the original sequence.
+interface NoteEvent {
+    time: string; // Tone.js time format (e.g., '0:0:0', '0:0:1', '0:1:0')
+    note: string | string[] | null;
+    duration: string; // Optional duration for the note
+}
+
+interface MyArp {
+    notes: (string | null)[];
+}
+
+let partList: { part: Tone.Part, duration: string }[] = [];
+
+function createPartEvents(notes: (string | null)[], sixteenthsDur: number): NoteEvent[] {
+    // 1. Convert the array of notes/chords into an array of NoteEvent objects
+    return notes.map((note, index) => {
+        // Calculate the 'time' for this event in measures:beats:sixteenths format
+        const time = `0:0:${index * sixteenthsDur}`; // Time is in 'measure:beat:sixteenth' format.
+
+        return {
+            time: time,
+            note: note,
+            duration: `0:0:${sixteenthsDur}`
+        };
+    });
+
+}
+
+function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number): { part: Tone.Part, duration: string } {
+    const partEvents = createPartEvents(notes, sixteenthsDur);
+    // The callback function fires for each event in the 'partEvents' array
+    const part = new Tone.Part<NoteEvent>((time, value) => {
+        if (value.note) {
+            synth?.triggerAttackRelease(value.note, value.duration, time)
+        }
+    }, partEvents);
+
+    let duration = sixteenthsDur * (notes.length + 2);
+    let durationString = `0:0:${duration}`;
+    console.log('duration was ' + duration);
+
+    return { part, duration: durationString };
+}
+function createAndPlayOpening(nestingLevel: number) {
+    // let eventList: NoteEvent[] = [
+    //     { time: '8n', note: 'C4', },
+    //     { time: '8n', note: 'E4', },
+    //     { time: '8n', note: 'G4', },
+    //     { time: '8n', note: 'C5', }
+    // ];
+    let notes = ['C4', 'E4', 'G4', 'C5'];
+    const sixteenthsDuration = 4;
+    partList = [];
+
+    // const partEvents = createPartEvents(notes, sixteenthsDuration);
+    // // The callback function fires for each event in the 'partEvents' array
+    // const part = new Tone.Part<NoteEvent>((time, value) => {
+    //     if (value.note) {
+    //         synth?.triggerAttackRelease(value.note, value.duration, time)
+    //     }
+    // }, partEvents);
+
+
+    partList.push(createPartWithDuration(notes, sixteenthsDuration));
+    let downNotes = notes.reverse();
+    partList.push(createPartWithDuration(downNotes, sixteenthsDuration));
+
+    // console.log('duration was ' + duration);
+
+    // Should actually get this from each Part in the list.
+    let duration = sixteenthsDuration * (notes.length + 2);
+    let durationString = `0:0:${duration}`;
+
+    const transport = Tone.getTransport();
+
+
+
+    let elapsedTime = 0;
+    partList.forEach((item, index) => {
+        const part = item.part;
+        part.loop = false;
+        part.start(elapsedTime);
+        elapsedTime = elapsedTime + Tone.Time(item.duration).toSeconds();
+    });
+
+    transport.scheduleOnce(() => {
+        transport.stop();
+        transport.position = 0;
+        console.log('Arpeggio finished.');
+    }, elapsedTime);
+
+    // 7. Start the Transport
+    transport.bpm.value = 240;
+    transport.start();
+}
+
+//
 
 let sequence: (string | (string | null)[])[] = [];
 export function playOpening(nestingLevel: number) {
@@ -100,5 +201,6 @@ export function playProgram(programText: string) {
     const tempo = slider ? parseInt(slider.value) : 150;
     sequence = [];
     eval(programText);
-    playSequence(sequence, tempo);
+    //playSequence(sequence, tempo);
+    createAndPlayOpening(0);
 }
