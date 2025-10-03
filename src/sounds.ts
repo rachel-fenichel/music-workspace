@@ -3,28 +3,36 @@ import * as Tone from "tone";
 // State variables
 let synth: null | Tone.PolySynth = null;
 
+
+let vibratoLFO: Tone.LFO | null = null;
+let piano = createPianoSynth();
+
+function createPianoSynth() {
+    // Initialize a PolySynth (to potentially play chords later if desired)
+    return new Tone.PolySynth(Tone.Synth, {
+        // Use 'am' (Amplitude Modulation) for a slightly richer tone than 'sine'
+        oscillator: {
+            type: "amsine",
+            modulationType: "sawtooth",
+            //modulationIndex: 3
+        },
+        // Configure the envelope for a quick, percussive piano-like sound
+        envelope: {
+            attack: 0.005,  // Very fast attack
+            decay: 0.5,     // Medium decay
+            sustain: 0.0,   // No sustain (key immediately fades)
+            release: 0.1    // Short release
+        },
+    });
+}
+
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
  * The synth is set up with a fast attack and rapid decay to simulate a percussive instrument.
  */
 export function initializeSynth() {
     if (synth === null) {
-        // Initialize a PolySynth (to potentially play chords later if desired)
-        synth = new Tone.PolySynth(Tone.Synth, {
-            // Use 'am' (Amplitude Modulation) for a slightly richer tone than 'sine'
-            oscillator: {
-                type: "amsine",
-                modulationType: "sawtooth",
-                //modulationIndex: 3
-            },
-            // Configure the envelope for a quick, percussive piano-like sound
-            envelope: {
-                attack: 0.005,  // Very fast attack
-                decay: 0.5,     // Medium decay
-                sustain: 0.0,   // No sustain (key immediately fades)
-                release: 0.1    // Short release
-            },
-        }).toDestination();
+        synth = piano.toDestination();
         console.log("Tone.PolySynth initialized.");
     }
 }
@@ -69,8 +77,8 @@ interface NoteEvent {
 }
 
 interface PartWithDuration {
- part: Tone.Part;
- duration: string; 
+    part: Tone.Part;
+    duration: string;
 }
 let partList: PartWithDuration[] = [];
 
