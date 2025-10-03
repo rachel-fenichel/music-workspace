@@ -69,11 +69,11 @@ interface NoteEvent {
     duration: string; // Optional duration for the note
 }
 
-interface MyArp {
-    notes: (string | null)[];
+interface PartWithDuration {
+ part: Tone.Part;
+ duration: string; 
 }
-
-let partList: { part: Tone.Part, duration: string }[] = [];
+let partList: PartWithDuration[] = [];
 
 function createPartEvents(notes: (string | null)[], sixteenthsDur: number): NoteEvent[] {
     // 1. Convert the array of notes/chords into an array of NoteEvent objects
@@ -87,7 +87,6 @@ function createPartEvents(notes: (string | null)[], sixteenthsDur: number): Note
             duration: `0:0:${sixteenthsDur}`
         };
     });
-
 }
 
 function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number): { part: Tone.Part, duration: string } {
@@ -99,48 +98,18 @@ function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number)
         }
     }, partEvents);
 
-    let duration = sixteenthsDur * (notes.length + 2);
+    let duration = sixteenthsDur * (notes.length);
     let durationString = `0:0:${duration}`;
     console.log('duration was ' + duration);
 
     return { part, duration: durationString };
 }
-function createAndPlayOpening(nestingLevel: number) {
-    // let eventList: NoteEvent[] = [
-    //     { time: '8n', note: 'C4', },
-    //     { time: '8n', note: 'E4', },
-    //     { time: '8n', note: 'G4', },
-    //     { time: '8n', note: 'C5', }
-    // ];
-    let notes = ['C4', 'E4', 'G4', 'C5'];
-    const sixteenthsDuration = 4;
-    partList = [];
 
-    // const partEvents = createPartEvents(notes, sixteenthsDuration);
-    // // The callback function fires for each event in the 'partEvents' array
-    // const part = new Tone.Part<NoteEvent>((time, value) => {
-    //     if (value.note) {
-    //         synth?.triggerAttackRelease(value.note, value.duration, time)
-    //     }
-    // }, partEvents);
-
-
-    partList.push(createPartWithDuration(notes, sixteenthsDuration));
-    let downNotes = notes.reverse();
-    partList.push(createPartWithDuration(downNotes, sixteenthsDuration));
-
-    // console.log('duration was ' + duration);
-
-    // Should actually get this from each Part in the list.
-    let duration = sixteenthsDuration * (notes.length + 2);
-    let durationString = `0:0:${duration}`;
-
+function playPartsFromList() {
     const transport = Tone.getTransport();
 
-
-
     let elapsedTime = 0;
-    partList.forEach((item, index) => {
+    partList.forEach((item) => {
         const part = item.part;
         part.loop = false;
         part.start(elapsedTime);
@@ -149,58 +118,77 @@ function createAndPlayOpening(nestingLevel: number) {
 
     transport.scheduleOnce(() => {
         transport.stop();
-        transport.position = 0;
+        transport.position = 0; // Reset position for next play.
         console.log('Arpeggio finished.');
     }, elapsedTime);
 
-    // 7. Start the Transport
-    transport.bpm.value = 240;
     transport.start();
+}
+
+function createOpening(nestingLevel: number) {
+    let notes = ['C4', 'E4', 'G4', 'C5', null];
+    // Duration of each note, in sixteenths.
+    const sixteenthsDuration = 1;
+    partList = [];
+
+    partList.push(createPartWithDuration(notes, sixteenthsDuration));
+    let downNotes = notes.reverse();
+    partList.push(createPartWithDuration(downNotes, sixteenthsDuration));
+
 }
 
 //
 
 let sequence: (string | (string | null)[])[] = [];
 export function playOpening(nestingLevel: number) {
+    let notes = [];
     if (nestingLevel == 0) {
-        sequence.push(['C4', 'E4', 'G4', 'C5', null, null]);
+        notes = ['C4', 'E4', 'G4', 'C5', null, null];
     } else if (nestingLevel == 1) {
-        sequence.push(['D4', 'F4', 'B4', 'D5', null, null]);
+        notes = ['D4', 'F4', 'B4', 'D5', null, null];
     } else {
-        sequence.push('A2');
+        notes = ['A2'];
     }
+    partList.push(createPartWithDuration(notes, 1));
 }
 
 export function playClosing(nestingLevel: number) {
+    let notes = [];
     if (nestingLevel == 0) {
-        sequence.push(['C5', 'G4', 'E4', 'C4', null, null]);
+        notes = ['C5', 'G4', 'E4', 'C4', null, null];
     } else if (nestingLevel == 1) {
-        sequence.push(['D5', 'B4', 'F4', 'D4', null, null]);
+        notes = ['D5', 'B4', 'F4', 'D4', null, null];
     } else {
-        sequence.push('A2');
+        notes = ['A2'];
     }
+    partList.push(createPartWithDuration(notes, 1));
 }
 
 export function playBlock(nestingLevel: number) {
+    let notes = [];
     if (nestingLevel == 0) {
-        sequence.push('C5');
+        notes.push('C5');
     } else if (nestingLevel == 1) {
-        sequence.push('C6');
+        notes.push('C6');
     } else {
-        sequence.push('C7');
+        notes.push('C7');
     }
+    partList.push(createPartWithDuration(notes, 4));
 }
 
 export function playBetweenStacks() {
-    sequence.push('C2');
+    partList.push(createPartWithDuration(['C2'], 4));
 }
 
 export function playProgram(programText: string) {
     initializeSynth();
     const slider = document.getElementById('tempoSlider') as HTMLInputElement | null;
     const tempo = slider ? parseInt(slider.value) : 150;
+    Tone.getTransport().bpm.value = tempo;
     sequence = [];
+    partList = [];
     eval(programText);
     //playSequence(sequence, tempo);
-    createAndPlayOpening(0);
+    //createOpening(0);
+    playPartsFromList();
 }
