@@ -9,7 +9,7 @@ import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { musicGenerator } from './generators/music';
-import { initializeSynth, playSequence } from './sounds';
+import { playProgram } from './sounds';
 // @ts-expect-error No types in js file
 import { blocks } from './blocks/p5_blocks';
 // @ts-expect-error No types in js file
@@ -80,48 +80,6 @@ if (ws) {
   });
 }
 
-let sequence: (string | (string | null)[])[] = [];
-export function playOpening(nestingLevel: number) {
-  if (nestingLevel == 0) {
-    sequence.push(['C4', 'E4', 'G4', 'C5', null, null]);
-  } else if (nestingLevel == 1) {
-    sequence.push(['D4', 'F4', 'B4', 'D5', null, null]);
-  } else {
-    sequence.push('A2');
-  }
-}
-
-export function playClosing(nestingLevel: number) {
-  if (nestingLevel == 0) {
-    sequence.push(['C5', 'G4', 'E4', 'C4', null, null]);
-  } else if (nestingLevel == 1) {
-    sequence.push(['D5', 'B4', 'F4', 'D4', null, null]);
-  } else {
-    sequence.push('A2');
-  }
-}
-
-export function playBlock(nestingLevel: number) {
-  if (nestingLevel == 0) {
-    sequence.push('C5');
-  } else if (nestingLevel == 1) {
-    sequence.push('C6');
-  } else {
-    sequence.push('C7');
-  }
-}
-
-export function playBetweenStacks() {
-  sequence.push('C2');
-}
-
 document.getElementById('play')?.addEventListener('click', () => {
-  initializeSynth();
-  const slider = document.getElementById('tempoSlider') as HTMLInputElement | null;
-  const tempo = slider ? parseInt(slider.value) : 150;
-  if (codeDiv?.textContent) {
-    sequence = [];
-    eval(codeDiv.textContent);
-    playSequence(sequence, tempo);
-  }
+  playProgram(codeDiv?.textContent || '');
 });

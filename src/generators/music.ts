@@ -1,5 +1,9 @@
 import * as Blockly from 'blockly';
 
+/**
+ * A Blockly generator that reflects the shape of the program (stacks, loops, etc)
+ * rather than the contents of the blocks.
+ */
 export class MusicGenerator extends Blockly.CodeGenerator {
     constructor(name = 'Music') {
         super(name)
@@ -41,6 +45,8 @@ export class MusicGenerator extends Blockly.CodeGenerator {
         if (statementInputs.length) {
             outputString += `playOpening(${nestingLevel})\n`;
             for (const inputName of statementInputs) {
+                // TODO: Play a bridge sound if there are multiple statement inputs
+                // and this is not the first.
                 const input = block.getInput(inputName);
                 if (input && input.connection?.isConnected()) {
                     outputString += this.musicBlockToCode(input.connection.targetBlock(), nestingLevel + 1);
@@ -51,18 +57,18 @@ export class MusicGenerator extends Blockly.CodeGenerator {
         else if (block.previousConnection && block.nextConnection) {
             outputString = `playBlock(${nestingLevel})\n`;
         }
-    const nextBlock =
-      block.nextConnection && block.nextConnection.targetBlock();
-    const nextCode = this.musicBlockToCode(nextBlock, nestingLevel);
+        const nextBlock =
+            block.nextConnection && block.nextConnection.targetBlock();
+        const nextCode = this.musicBlockToCode(nextBlock, nestingLevel);
         return outputString + nextCode;
     }
 
     /**
- * Iterates through a block's inputs and returns a list of names 
- * for inputs that are of type INPUT_STATEMENT.
- * @param {Blockly.Block} block The block object to inspect.
- * @returns {Array<string>} A list of input names (e.g., ['DO', 'ELSE']).
- */
+     * Iterates through a block's inputs and returns a list of names 
+     * for inputs that are of type INPUT_STATEMENT.
+     * @param {Blockly.Block} block The block object to inspect.
+     * @returns {Array<string>} A list of input names (e.g., ['DO', 'ELSE']).
+     */
     getBlockStatementInputs(block: Blockly.Block): Array<string> {
         const statementInputs = [];
 
