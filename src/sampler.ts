@@ -3,8 +3,6 @@ import * as Tone from 'tone';
 // Import a single sample to get the base path from webpack
 // @ts-expect-error No types in js file
 import pianoC3 from './samples/piano/C3.mp3';
-// @ts-expect-error No types in js file
-import * as piano from './samples/piano';
 
 // Construct the base URL using the imported asset's path
 const baseURL = pianoC3.substring(0, pianoC3.lastIndexOf('/') + 1);
@@ -107,16 +105,6 @@ const pianoNotes = {
         'G#5': 'Gs5.mp3',
         'G#6': 'Gs6.mp3'
     };
-
-const singleNote = {
-        'C7': 'C7.mp3',
-        'C1': 'C1.mp3',
-        'C2': 'C2.mp3',
-        'C3': 'C3.mp3',
-        'C4': 'C4.mp3',
-        'C5': 'C5.mp3',
-        'C6': 'C6.mp3',
-};
 
 export const instrument = new Tone.Sampler({
   urls: pianoNotes,

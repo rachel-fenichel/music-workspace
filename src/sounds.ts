@@ -6,7 +6,10 @@ let synth: Tone.PolySynth = createPianoSynth();
 let sampler: Tone.Sampler = samplerInstrument;
 let activeInstrument : Tone.PolySynth | Tone.Sampler = sampler;
 
-
+/**
+ * Initializes and configures the Tone.PolySynth for a piano-like sound.
+ * The synth is set up with a fast attack and rapid decay to simulate a percussive instrument.
+ */
 function createPianoSynth() {
     // Initialize a PolySynth (to potentially play chords later if desired)
     return new Tone.PolySynth(Tone.Synth, {
@@ -25,23 +28,6 @@ function createPianoSynth() {
         },
     });
 }
-
-/**
- * Initializes and configures the Tone.PolySynth for a piano-like sound.
- * The synth is set up with a fast attack and rapid decay to simulate a percussive instrument.
- */
-export function initializeSynth() {
-    // if (synth === null) {
-    //     synth = piano.toDestination();
-    //     console.log("Tone.PolySynth initialized.");
-    // }
-        //sampler = sampler.toDestination();
-        
-        // Does the opposite of what the function says.
-        useSampler();
-        //useSynth();
-}
-
 
 export function useSampler() {
         activeInstrument = sampler;
@@ -192,8 +178,6 @@ function updateTempo() {
 }
 
 export function playProgram(programText: string) {
-    Tone.start();
-    initializeSynth();
     updateTempo();
     partList = [];
     // Shoves items into the parts list.
