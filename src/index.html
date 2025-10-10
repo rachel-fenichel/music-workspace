@@ -12,9 +12,9 @@
       <button id="play">Play</button>
 
       <form id="options">
-        <div>
-          <label for="scenario">Scenario:</label>
-          <select name="scenario" id="scenario" onchange="document.forms.options.submit()">
+        <div class="control-group">
+          <label for="scenario" label="control-label">Scenario:</label>
+          <select name="scenario" id="scenario" onchange="document.forms.options.submit()" class="fancy-select">
             <option value="simpleCircle">simple circle</option>
             <option value="sun">sun</option>
             <option value="blank">blank canvas</option>
@@ -35,23 +35,23 @@
             <option value="emptyWorkspace">empty workspace</option>
           </select>
         </div>
-        <div>
-          <label for="instrumentSelect">Select Instrument:</label>
-          <select id="instrumentSelect" name="instrument">
+        <div class="control-group">
+          <label for="instrumentSelect" class="control-label">Select Instrument:</label>
+          <select id="instrumentSelect" name="instrument" class="fancy-select">
             <option value="piano">Piano</option>
             <option value="synth">Synth</option>
             <option value="clarinet">Clarinet</option>
           </select>
         </div>
-        <div>
-          <label for="tempoSlider">Tempo:</label>
-          <input type="range" id="tempoSlider" min="40" max="240" value="150">
+        <div class="control-group">
+          <label for="tempoSlider" class="control-label">Tempo:</label>
+          <input type="range" id="tempoSlider" min="40" max="240" value="150" class="fancy-slider">
         </div>
-        <div>
-          <label for="shiftSlider">
+        <div class="control-group">
+          <label for="shiftSlider" class="control-label">
             Shift up per level of nesting (Semitones):
           </label>
-          <input type="range" id="shiftSlider" min="0" max="12" value="12" step="1">
+          <input type="range" id="shiftSlider" min="0" max="12" value="12" step="1" class="fancy-slider">
         </div>
       </form>
       <pre id="generatedCode"><code></code></pre>
