@@ -5,7 +5,8 @@ import * as Tone from 'tone';
 import pianoC3 from './samples/piano/C3.mp3';
 
 // Construct the base URL using the imported asset's path
-const baseURL = pianoC3.substring(0, pianoC3.lastIndexOf('/') + 1);
+const pianoBase = pianoC3.substring(0, pianoC3.lastIndexOf('/'));
+const sampleBase = pianoBase.substring(0, pianoBase.lastIndexOf('/') + 1);
 
 // A new entry point to require all assets
 // For example, in a file named `assets.js`
@@ -109,7 +110,32 @@ const pianoNotes = {
 export const piano = new Tone.Sampler({
     urls: pianoNotes,
     // Pass the constructed base URL
-    baseUrl: baseURL,
+    baseUrl: sampleBase + 'piano/',
+    onload: () => {
+        console.log('Samples loaded!');
+    }
+});
+
+
+const clarinetNotes = {
+        'D4': 'D4.mp3',
+        'D5': 'D5.mp3',
+        'D6': 'D6.mp3',
+        'F3': 'F3.mp3',
+        'F4': 'F4.mp3',
+        'F5': 'F5.mp3',
+        'F#6': 'Fs6.mp3',
+        'A#3': 'As3.mp3',
+        'A#4': 'As4.mp3',
+        'A#5': 'As5.mp3',
+        'D3': 'D3.mp3'
+
+}
+
+export const clarinet = new Tone.Sampler({
+    urls: clarinetNotes,
+    // Pass the constructed base URL
+    baseUrl: sampleBase + 'clarinet/',
     onload: () => {
         console.log('Samples loaded!');
     }

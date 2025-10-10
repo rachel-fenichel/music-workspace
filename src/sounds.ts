@@ -1,5 +1,5 @@
 import * as Tone from "tone";
-import { piano } from "./sampler";
+import { piano, clarinet } from "./sampler";
 
 // State variables
 let synth: Tone.PolySynth = createPianoSynth();
@@ -32,6 +32,7 @@ function createPianoSynth() {
 let instruments : {[key: string] : any}= {
     'piano': piano,
     'synth': synth,
+    'clarinet': clarinet,
 }
 
 export function useSampler() {
