@@ -106,7 +106,7 @@ const pianoNotes = {
     'G#6': 'Gs6.mp3'
 };
 
-export const instrument = new Tone.Sampler({
+export const piano = new Tone.Sampler({
     urls: pianoNotes,
     // Pass the constructed base URL
     baseUrl: baseURL,

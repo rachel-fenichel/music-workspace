@@ -9,7 +9,7 @@ import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { musicGenerator } from './generators/music';
-import { playProgram, setInstrument } from './sounds';
+import { playProgram } from './sounds';
 // @ts-expect-error No types in js file
 import { blocks } from './blocks/p5_blocks';
 // @ts-expect-error No types in js file
@@ -85,8 +85,4 @@ if (ws) {
 document.getElementById('play')?.addEventListener('click', () => {
   Tone.start();
   playProgram(codeDiv?.textContent || '');
-});
-
-selectElement?.addEventListener('change', (event) => {
-  setInstrument(selectElement?.textContent);
 });
