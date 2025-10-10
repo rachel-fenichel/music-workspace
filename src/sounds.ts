@@ -4,7 +4,7 @@ import { instrument as samplerInstrument } from "./sampler";
 // State variables
 let synth: Tone.PolySynth = createPianoSynth();
 let sampler: Tone.Sampler = samplerInstrument;
-let activeInstrument : Tone.PolySynth | Tone.Sampler = sampler;
+let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
@@ -30,8 +30,8 @@ function createPianoSynth() {
 }
 
 export function useSampler() {
-        activeInstrument = sampler;
-        activeInstrument.toDestination();
+    activeInstrument = sampler;
+    activeInstrument.toDestination();
 }
 
 export function useSynth() {
