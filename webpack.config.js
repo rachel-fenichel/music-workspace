@@ -9,7 +9,6 @@ const config = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
-    publicPath: '/',
   },
   // Enable webpack-dev-server to get hot refresh of the app.
   devServer: {
@@ -55,7 +54,7 @@ module.exports = (env, argv) => {
   if (argv.mode === 'development') {
     // Set the output path to the `build` directory
     // so we don't clobber production builds.
-    config.output.path = path.resolve(__dirname, 'ohheythere');
+    config.output.path = path.resolve(__dirname, 'build');
 
     // Generate source maps for our code for easier debugging.
     // Not suitable for production builds. If you want source maps in
