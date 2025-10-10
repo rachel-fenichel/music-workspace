@@ -9,6 +9,7 @@ const config = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+    publicPath: '/',
   },
   // Enable webpack-dev-server to get hot refresh of the app.
   devServer: {
@@ -26,10 +27,19 @@ const config = {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
+      {
+        // Add a rule to handle audio files
+        test: /\.(wav|mp3|ogg)$/i,
+        type: 'asset/resource',
+        generator: {
+          // Specify the output directory and filename for your audio files
+          filename: '[path][name][ext]'
+        }
+      }
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.mp3'],
   },
   plugins: [
     // Generate the HTML index page based on our template.
@@ -45,7 +55,7 @@ module.exports = (env, argv) => {
   if (argv.mode === 'development') {
     // Set the output path to the `build` directory
     // so we don't clobber production builds.
-    config.output.path = path.resolve(__dirname, 'build');
+    config.output.path = path.resolve(__dirname, 'ohheythere');
 
     // Generate source maps for our code for easier debugging.
     // Not suitable for production builds. If you want source maps in

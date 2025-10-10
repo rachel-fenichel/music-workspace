@@ -1,11 +1,11 @@
 import * as Tone from "tone";
+import { instrument as samplerInstrument } from "./sampler";
 
 // State variables
-let synth: null | Tone.PolySynth = null;
+let synth: Tone.PolySynth = createPianoSynth();
+let sampler: Tone.Sampler = samplerInstrument;
+let activeInstrument : Tone.PolySynth | Tone.Sampler = sampler;
 
-
-let vibratoLFO: Tone.LFO | null = null;
-let piano = createPianoSynth();
 
 function createPianoSynth() {
     // Initialize a PolySynth (to potentially play chords later if desired)
@@ -31,10 +31,26 @@ function createPianoSynth() {
  * The synth is set up with a fast attack and rapid decay to simulate a percussive instrument.
  */
 export function initializeSynth() {
-    if (synth === null) {
-        synth = piano.toDestination();
-        console.log("Tone.PolySynth initialized.");
-    }
+    // if (synth === null) {
+    //     synth = piano.toDestination();
+    //     console.log("Tone.PolySynth initialized.");
+    // }
+        //sampler = sampler.toDestination();
+        
+        // Does the opposite of what the function says.
+        useSampler();
+        //useSynth();
+}
+
+
+export function useSampler() {
+        activeInstrument = sampler;
+        activeInstrument.toDestination();
+}
+
+export function useSynth() {
+    activeInstrument = synth;
+    activeInstrument.toDestination();
 }
 
 export function playSequence(notes: (string | (string | null)[])[], tempo: number) {
@@ -46,7 +62,7 @@ export function playSequence(notes: (string | (string | null)[])[], tempo: numbe
     const totalDuration = durationInSeconds * notes.length + 0.05;
     const sequence = new Tone.Sequence(function (time, note) {
         if (note) {
-            synth?.triggerAttackRelease(note, '4n', time);
+            activeInstrument?.triggerAttackRelease(note, '4n', time);
         }
     }, notes, subdivision);
     sequence.loop = false;
@@ -100,7 +116,7 @@ function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number)
     // The callback function fires for each event in the 'partEvents' array
     const part = new Tone.Part<NoteEvent>((time, value) => {
         if (value.note) {
-            synth?.triggerAttackRelease(value.note, value.duration, time)
+            activeInstrument?.triggerAttackRelease(value.note, value.duration, time)
         }
     }, partEvents);
 
@@ -176,6 +192,7 @@ function updateTempo() {
 }
 
 export function playProgram(programText: string) {
+    Tone.start();
     initializeSynth();
     updateTempo();
     partList = [];

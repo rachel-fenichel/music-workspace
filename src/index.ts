@@ -15,6 +15,7 @@ import { blocks } from './blocks/p5_blocks';
 // @ts-expect-error No types in js file
 import { load as loadTestBlocks } from './loadTestBlocks';
 import { installAllBlocks as installColourBlocks } from '@blockly/field-colour';
+import * as Tone from 'tone';
 
 // Register the blocks and generator with Blockly
 Blockly.common.defineBlocks(blocks);
@@ -81,5 +82,6 @@ if (ws) {
 }
 
 document.getElementById('play')?.addEventListener('click', () => {
+  Tone.start();
   playProgram(codeDiv?.textContent || '');
 });
