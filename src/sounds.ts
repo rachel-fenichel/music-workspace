@@ -45,36 +45,6 @@ export function useSynth() {
     activeInstrument.toDestination();
 }
 
-export function playSequence(notes: (string | (string | null)[])[], tempo: number) {
-    Tone.getTransport().bpm.value = tempo;
-
-    const subdivision = '2n';
-    const durationInSeconds = Tone.Time(subdivision).toSeconds();
-    // Add a small buffer (e.g., 0.05s) to ensure the final note's release completes before stopping.
-    const totalDuration = durationInSeconds * notes.length + 0.05;
-    const sequence = new Tone.Sequence(function (time, note) {
-        if (note) {
-            activeInstrument?.triggerAttackRelease(note, '4n', time);
-        }
-    }, notes, subdivision);
-    sequence.loop = false;
-    sequence.start(0);
-
-    // 2. Schedule the transport to stop and update status at the end
-    // We use Tone.Transport.scheduleOnce for precise timing.
-    Tone.Transport.scheduleOnce((time) => {
-        Tone.Transport.stop();
-        Tone.Transport.position = 0; // Reset transport position for next play
-        console.log('Sequence finished. Click to play again.');
-        console.log("Tone.Transport stopped.");
-    }, totalDuration);
-
-    // 3. Reset the transport position and start the main transport
-    Tone.Transport.position = 0;
-    Tone.Transport.start();
-    console.log(`Starting Transport. Total duration: ${totalDuration.toFixed(2)}s`);
-}
-
 // The data structure for the notes must be updated to be compatible with Tone.Part
 // We will use an array of objects where each object contains a time, note, and duration.
 // The time will be calculated based on the position in the original sequence.
