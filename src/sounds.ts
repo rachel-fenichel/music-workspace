@@ -116,25 +116,17 @@ function shiftNotes(notes: (string | null)[], shiftAmount: number): (string | nu
     const shiftBase = SEMITONES_PER_OCTAVE;
 
     return notes.map(note => {
-        // 1. Handle null values: return them unchanged as requested.
         if (note === null) {
             return null;
         }
 
         try {
-            // 2. Convert the note string to a Tone.Midi object.
-            // This is the most reliable way to handle transposition.
             const midi = Tone.Midi(note);
-
-            // 3. Transpose the MIDI value up by 12 semitones (1 octave).
             const transposedMidi = midi.transpose(shiftAmount * shiftBase);
-
-            // 4. Convert the new MIDI value back into a note string (e.g., 'C5').
             return transposedMidi.toNote();
         } catch (error) {
-            // Log an error if the note string is invalid (e.g., 'invalid')
             console.error(`Skipping invalid note string: ${note}`, error);
-            return null; // Return null if an error occurs
+            return null;
         }
     });
 }
