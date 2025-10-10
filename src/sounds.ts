@@ -178,6 +178,7 @@ function updateTempo() {
 }
 
 export function playProgram(programText: string) {
+    activeInstrument.toDestination();
     updateTempo();
     partList = [];
     // Shoves items into the parts list.
