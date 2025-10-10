@@ -8,6 +8,7 @@ let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
 // An octave shift is always +12 semitones in music theory.
 const SEMITONES_PER_OCTAVE = 12;
+let shiftBase = SEMITONES_PER_OCTAVE;
 
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
@@ -113,8 +114,6 @@ function playPartsFromList() {
 }
 
 function shiftNotes(notes: (string | null)[], shiftAmount: number): (string | null)[] {
-    const shiftBase = SEMITONES_PER_OCTAVE;
-
     return notes.map(note => {
         if (note === null) {
             return null;
@@ -167,10 +166,16 @@ function updateInstrument() {
     activeInstrument.toDestination();
 }
 
+function updateShift() {
+    const shiftSlider = document.getElementById('shiftSlider') as HTMLInputElement | null;
+    shiftBase = parseInt(shiftSlider?.value || '12', 10);
+}
+
 export function playProgram(programText: string) {
     activeInstrument.toDestination();
     updateTempo();
     updateInstrument();
+    updateShift();
     partList = [];
     // Shoves items into the parts list.
     eval(programText);
