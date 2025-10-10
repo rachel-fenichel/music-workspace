@@ -6,6 +6,9 @@ let synth: Tone.PolySynth = createPianoSynth();
 let sampler: Tone.Sampler = piano;
 let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
+// An octave shift is always +12 semitones in music theory.
+const SEMITONES_PER_OCTAVE = 12;
+
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
  * The synth is set up with a fast attack and rapid decay to simulate a percussive instrument.
@@ -29,7 +32,7 @@ function createPianoSynth() {
     });
 }
 
-let instruments : {[key: string] : any}= {
+let instruments: { [key: string]: any } = {
     'piano': piano,
     'synth': synth,
     'clarinet': clarinet,
@@ -101,45 +104,56 @@ function playPartsFromList() {
 
     transport.scheduleOnce(() => {
         transport.stop();
+        // Get rid of old list of events.
+        transport.cancel();
         transport.position = 0; // Reset position for next play.
     }, elapsedTime);
 
     transport.start();
 }
 
+function shiftNotes(notes: (string | null)[], shiftAmount: number): (string | null)[] {
+    const shiftBase = SEMITONES_PER_OCTAVE;
+
+    return notes.map(note => {
+        // 1. Handle null values: return them unchanged as requested.
+        if (note === null) {
+            return null;
+        }
+
+        try {
+            // 2. Convert the note string to a Tone.Midi object.
+            // This is the most reliable way to handle transposition.
+            const midi = Tone.Midi(note);
+
+            // 3. Transpose the MIDI value up by 12 semitones (1 octave).
+            const transposedMidi = midi.transpose(shiftAmount * shiftBase);
+
+            // 4. Convert the new MIDI value back into a note string (e.g., 'C5').
+            return transposedMidi.toNote();
+        } catch (error) {
+            // Log an error if the note string is invalid (e.g., 'invalid')
+            console.error(`Skipping invalid note string: ${note}`, error);
+            return null; // Return null if an error occurs
+        }
+    });
+}
+
 export function playOpening(nestingLevel: number) {
-    let notes = [];
-    if (nestingLevel == 0) {
-        notes = ['C4', 'E4', 'G4', 'C5', null, null];
-    } else if (nestingLevel == 1) {
-        notes = ['D4', 'F4', 'B4', 'D5', null, null];
-    } else {
-        notes = ['A2'];
-    }
+    let baseNotes = ['C4', 'E4', 'G4', 'C5', null, null];
+    let notes = shiftNotes(baseNotes, nestingLevel);
     partList.push(createPartWithDuration(notes, 1));
 }
 
 export function playClosing(nestingLevel: number) {
-    let notes = [];
-    if (nestingLevel == 0) {
-        notes = ['C5', 'G4', 'E4', 'C4', null, null];
-    } else if (nestingLevel == 1) {
-        notes = ['D5', 'B4', 'F4', 'D4', null, null];
-    } else {
-        notes = ['A2'];
-    }
+    let notes = ['C5', 'G4', 'E4', 'C4', null, null];
+    notes = shiftNotes(notes, nestingLevel);
     partList.push(createPartWithDuration(notes, 1));
 }
 
 export function playBlock(nestingLevel: number) {
-    let notes = [];
-    if (nestingLevel == 0) {
-        notes.push('C5');
-    } else if (nestingLevel == 1) {
-        notes.push('C6');
-    } else {
-        notes.push('C7');
-    }
+    let notes: (string | null)[] = ['C5'];
+    notes = shiftNotes(notes, nestingLevel);
     partList.push(createPartWithDuration(notes, 4));
 }
 
