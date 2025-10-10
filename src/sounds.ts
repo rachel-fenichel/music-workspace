@@ -1,9 +1,9 @@
 import * as Tone from "tone";
-import { piano as samplerInstrument } from "./sampler";
+import { piano } from "./sampler";
 
 // State variables
 let synth: Tone.PolySynth = createPianoSynth();
-let sampler: Tone.Sampler = samplerInstrument;
+let sampler: Tone.Sampler = piano;
 let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
 /**
@@ -27,6 +27,11 @@ function createPianoSynth() {
             release: 0.1    // Short release
         },
     });
+}
+
+let instruments : {[key: string] : any}= {
+    'piano': piano,
+    'synth': synth,
 }
 
 export function useSampler() {
@@ -180,11 +185,9 @@ function updateTempo() {
 function updateInstrument() {
     const selector = document.getElementById('instrumentSelect') as HTMLSelectElement | null;
     const instrumentName = selector ? selector.value : 'piano';
-    if (instrumentName == 'piano') {
-        useSampler();
-    } else {
-        useSynth();
-    }
+
+    activeInstrument = instruments[instrumentName];
+    activeInstrument.toDestination();
 }
 
 export function playProgram(programText: string) {
