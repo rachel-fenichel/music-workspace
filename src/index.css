@@ -33,8 +33,33 @@ code {
 #generatedCode {
   height: 50%;
   background-color: rgb(247, 240, 228);
+  display: none;
 }
 
 #output {
   height: 50%;
+}
+
+#play {
+    background-color: #4f46e5; /* Indigo-600 equivalent */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    display: block; /* Make it take full width on small screens */
+    width: 100%;
+    margin-bottom: 1.5rem; /* Equivalent to mb-6 */
+}
+#play:hover {
+    background-color: #4338ca; /* Indigo-700 equivalent */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+}
+#play:active {
+    background-color: #3730a3; /* Indigo-800 equivalent */
+    transform: translateY(1px);
 }
