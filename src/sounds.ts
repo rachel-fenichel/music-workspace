@@ -185,3 +185,14 @@ export function playProgram(programText: string) {
     eval(programText);
     playPartsFromList();
 }
+
+export function setInstrument(instrumentName: string) {
+    if (instrumentName == 'Piano') {
+        useSampler();
+        console.log ('piano');
+    } else {
+        useSynth();
+        console.log('synth');
+    }
+
+}

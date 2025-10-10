@@ -9,7 +9,7 @@ import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { musicGenerator } from './generators/music';
-import { playProgram } from './sounds';
+import { playProgram, setInstrument } from './sounds';
 // @ts-expect-error No types in js file
 import { blocks } from './blocks/p5_blocks';
 // @ts-expect-error No types in js file
@@ -38,6 +38,7 @@ window.addEventListener('load', () => {
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode')?.firstChild;
 const blocklyDiv = document.getElementById('blocklyDiv');
+const selectElement = document.getElementById('instrumentSelect');
 
 if (!blocklyDiv) {
   throw new Error(`div with id 'blocklyDiv' not found`);
@@ -84,4 +85,8 @@ if (ws) {
 document.getElementById('play')?.addEventListener('click', () => {
   Tone.start();
   playProgram(codeDiv?.textContent || '');
+});
+
+selectElement?.addEventListener('change', (event) => {
+  setInstrument(selectElement?.textContent);
 });
