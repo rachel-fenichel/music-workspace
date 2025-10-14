@@ -51,8 +51,20 @@
           <label for="shiftSlider" class="control-label">
             Shift up per level of nesting (Semitones):
           </label>
-          <input type="range" id="shiftSlider" min="0" max="12" value="12" step="1" class="fancy-slider">
+          <input type="range" id="shiftSlider" min="0" max="12" value="7" step="1" class="fancy-slider">
         </div>
+         <!-- NEW TEXT INPUT CONTROL -->
+        <div class="control-group">
+            <label for="openingNotes" class="control-label">
+                Enter Opening Notes (C4, E4, null, etc. separated by commas or spaces):
+            </label>
+            <textarea id="openingNotes" class="text-input" rows="3">C4, E4, G4, C5</textarea>
+            <label for="baseNotes" class="control-label">
+                Enter single-block notes:
+            </label>
+            <textarea id="baseNotes" class="text-input" rows="3">C5</textarea>
+        </div>
+        <!-- END NEW TEXT INPUT CONTROL -->
       </form>
       <pre id="generatedCode"><code></code></pre>
       <div id="output"></div>
