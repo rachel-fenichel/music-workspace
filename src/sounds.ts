@@ -120,7 +120,16 @@ function updateInstrument() {
     activeInstrument.toDestination();
 }
 
+function cancelPlay() {
+    let transport = Tone.getTransport();
+    transport.stop();
+    // Get rid of old list of events.
+    transport.cancel();
+    transport.position = 0; // Reset position for next play.
+}
+
 export function playProgram(programText: string) {
+    cancelPlay();
     updateInstrument();
     activeInstrument.toDestination();
 
@@ -128,7 +137,7 @@ export function playProgram(programText: string) {
     soundConfig.updateNotes();
 
     partList = [];
-    
+
     // Shoves items into the parts list.
     eval(programText);
     playPartsFromList();

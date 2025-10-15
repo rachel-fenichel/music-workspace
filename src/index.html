@@ -50,18 +50,105 @@
           <label for="tempoSlider" class="control-label">Tempo:</label>
           <input type="range" id="tempoSlider" min="40" max="240" value="150" class="fancy-slider">
         </div>
-         <!-- NEW TEXT INPUT CONTROL -->
-        <div class="control-group">
-            <label for="openingNotes" class="control-label">
-                Enter Opening Notes (C4, E4, null, etc. separated by commas or spaces):
-            </label>
-            <textarea id="openingNotes" class="text-input" rows="3">C4, E4, G4, C5</textarea>
-            <label for="baseNotes" class="control-label">
-                Enter single-block notes:
-            </label>
-            <textarea id="baseNotes" class="text-input" rows="3">C5</textarea>
+
+
+        <!-- Vertical Accordion Container -->
+        <div class="accordion-container">
+
+          <!-- Group 1 -->
+          <div id="opening-notes-container" class="group-container">
+            <div class="group-header-row" onclick="toggleAccordion('opening-notes-content', 'opening-notes-icon')">
+              <label class="group-header">Edit Opening Notes</label>
+              <span id="opening-notes-icon" class="toggle-icon">▼</span>
+            </div>
+            <!-- Collapsible Content Area -->
+            <div id="opening-notes-content" class="collapsible-content">
+              <div class="input-wrapper">
+                <div class="input-group-row">
+                  <label for="opening-notes-l1" class="input-label">Level 1:</label>
+                  <input type="text" id="opening-notes-l1" class="input-field" value="C4, E4, G4, C5">
+                </div>
+                <div class="input-group-row">
+                  <label for="opening-notes-l2" class="input-label">Level 2:</label>
+                  <input type="text" id="opening-notes-l2" class="input-field" 
+                    value="C4, E4, G4, C5">
+                </div>
+                <div class="input-group-row">
+                  <label for="opening-notes-l3" class="input-label">Level 3:</label>
+                  <input type="text" id="opening-notes-l3" class="input-field" value="C4, E4, G4, C5">
+                </div>
+                <div class="input-group-row">
+                  <label for="opening-notes-l4" class="input-label">Level 4:</label>
+                  <input type="text" id="opening-notes-l4" class="input-field" value="C4, E4, G4, C5">
+                </div>
+              </div>
+              <button onclick="handleGroupOneSet('opening-notes-container')" class="set-button">Set</button>
+            </div>
+          </div>
+
+          <!-- Group 2 -->
+          <div id="closing-notes-container" class="group-container">
+            <div class="group-header-row" onclick="toggleAccordion('closing-notes-content', 'closing-notes-icon')">
+              <label class="group-header">Edit Closing Notes</label>
+              <span id="closing-notes-icon" class="toggle-icon">▼</span>
+            </div>
+            <!-- Collapsible Content Area -->
+            <div id="closing-notes-content" class="collapsible-content">
+              <div class="input-wrapper">
+                <div class="input-group-row">
+                  <label for="closing-notes-l1" class="input-label">Level 1:</label>
+                  <input type="text" id="closing-notes-l1" class="input-field"
+                    value="C4, E4, G4, C5">
+                </div>
+                <div class="input-group-row">
+                  <label for="closing-notes-l2" class="input-label">Level 2:</label>
+                  <input type="text" id="closing-notes-l2" class="input-field" value="C4, E4, G4, C5">
+                </div>
+                <div class="input-group-row">
+                  <label for="closing-notes-l3" class="input-label">Level 3:</label>
+                  <input type="text" id="closing-notes-l3" class="input-field" 
+                    value="C4, E4, G4, C5">
+                </div>
+                <div class="input-group-row">
+                  <label for="closing-notes-l4" class="input-label">Level 4:</label>
+                  <input type="text" id="closing-notes-l4" class="input-field" value="C4, E4, G4, C5">
+                </div>
+              </div>
+              <button onclick="handleGroupTwoSet('closing-notes-container')" class="set-button">Set</button>
+            </div>
+          </div>
+
+          <!-- Group 3 -->
+          <div id="basic-notes-container" class="group-container">
+            <div class="group-header-row" onclick="toggleAccordion('basic-notes-content', 'basic-notes-icon')">
+              <label class="group-header">Edit Basic Notes</label>
+              <span id="basic-notes-icon" class="toggle-icon">▼</span>
+            </div>
+            <!-- Collapsible Content Area -->
+            <div id="basic-notes-content" class="collapsible-content">
+              <div class="input-wrapper">
+                <div class="input-group-row">
+                  <label for="basic-notes-l1" class="input-label">Level 1:</label>
+                  <input type="text" id="basic-notes-l1" class="input-field" value="C4">
+                </div>
+                <div class="input-group-row">
+                  <label for="basic-notes-l2" class="input-label">Level 2:</label>
+                  <input type="text" id="basic-notes-l2" class="input-field" value="E4">
+                </div>
+                <div class="input-group-row">
+                  <label for="basic-notes-l3" class="input-label">Level 3:</label>
+                  <input type="text" id="basic-notes-l3" class="input-field" value="G4">
+                </div>
+                <div class="input-group-row">
+                  <label for="basic-notes-l4" class="input-label">Level 4:</label>
+                  <input type="text" id="basic-notes-l4" class="input-field" value="C5">
+                </div>
+              </div>
+              <button onclick="handleGroupThreeSet('basic-notes-container')" class="set-button">Set</button>
+            </div>
+          </div>
+
         </div>
-        <!-- END NEW TEXT INPUT CONTROL -->
       </form>
       <pre id="generatedCode"><code></code></pre>
       <div id="output"></div>
@@ -79,6 +166,9 @@
           Some ideas I want to explore next: different instruments; adjust tempo by number of
           blocks on the workspace; adjust tempo by number of blocks in a stack; add a "bridge" sound
           for statement inputs in the middle of a block.
+        </p>
+        <p>
+          Notes can be specified as C4, E4, null, etc. separated by commas or spaces.
         </p>
         <p>
           Contact info: https://github.com/rachel-fenichel/music-workspace
