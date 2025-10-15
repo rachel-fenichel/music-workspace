@@ -5,7 +5,7 @@
  */
 
 import * as Blockly from 'blockly/core';
-import { longStack, sixStacks } from './scenarios/longStacks';
+import { longStack, sixStacks, ifStack } from './scenarios/longStacks';
 import { sunnyDay } from './scenarios/sunnyDay';
 import { simpleCircle } from './scenarios/simpleCircle';
 import { blankCanvas } from './scenarios/blankCanvas';
@@ -40,7 +40,8 @@ export const load = function (workspace, scenarioString) {
     'sun': sunnyDay,
     emptyWorkspace,
     'longStack': longStack,
-    'sixStacks': sixStacks
+    'sixStacks': sixStacks,
+    'ifStack': ifStack
   };
   
   // Don't emit events during loading.
