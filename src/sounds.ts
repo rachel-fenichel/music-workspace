@@ -1,6 +1,7 @@
 import * as Tone from "tone";
 import { piano, clarinet } from "./sampler";
 import { SoundConfig } from "./soundConfig";
+import { SoundEffect } from "./SoundEffect";
 
 // State variables
 let synth: Tone.PolySynth = createPianoSynth();
@@ -8,14 +9,6 @@ let sampler: Tone.Sampler = piano;
 let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
 let soundConfig : SoundConfig = new SoundConfig();
-
-
-// An octave shift is always +12 semitones in music theory.
-const SEMITONES_PER_OCTAVE = 12;
-let shiftBase = SEMITONES_PER_OCTAVE;
-let openingNotes : (string | null)[] = [];
-let closingNotes : (string | null)[] = [];
-let baseNotes : (string | null)[] = ['C5'];
 
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
@@ -84,8 +77,9 @@ function createPartEvents(notes: (string | null)[], sixteenthsDur: number): Note
     });
 }
 
-function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number): { part: Tone.Part, duration: string } {
-    const partEvents = createPartEvents(notes, sixteenthsDur);
+function createPartWithDuration(effect: SoundEffect): { part: Tone.Part, duration: string } {
+    const partEvents = effect.toPartEvents();
+    //createPartEvents(notes, sixteenthsDur);
     // The callback function fires for each event in the 'partEvents' array
     const part = new Tone.Part<NoteEvent>((time, value) => {
         if (value.note) {
@@ -93,10 +87,10 @@ function createPartWithDuration(notes: (string | null)[], sixteenthsDur: number)
         }
     }, partEvents);
 
-    let duration = sixteenthsDur * (notes.length);
-    let durationString = `0:0:${duration}`;
+    // let duration = sixteenthsDur * (notes.length);
+    // let durationString = `0:0:${duration}`;
 
-    return { part, duration: durationString };
+    return { part, duration: effect.getDurationString() };
 }
 
 function playPartsFromList() {
@@ -120,45 +114,27 @@ function playPartsFromList() {
     transport.start();
 }
 
-function shiftNotes(notes: (string | null)[], shiftAmount: number): (string | null)[] {
-    return notes.map(note => {
-        if (note === null) {
-            return null;
-        }
-
-        try {
-            const midi = Tone.Midi(note);
-            const transposedMidi = midi.transpose(shiftAmount * shiftBase);
-            return transposedMidi.toNote();
-        } catch (error) {
-            console.error(`Skipping invalid note string: ${note}`, error);
-            return null;
-        }
-    });
-}
-
 export function playOpening(nestingLevel: number) {
     let notes = Array.from(soundConfig.openingNotes[nestingLevel].notes);
     notes.push(null);
     notes.push(null);
-    partList.push(createPartWithDuration(notes, 1));
+    partList.push(createPartWithDuration(soundConfig.openingNotes[nestingLevel]));
 }
 
 export function playClosing(nestingLevel: number) {
     let notes = Array.from(soundConfig.closingNotes[nestingLevel].notes);
     notes.push(null);
     notes.push(null);
-    partList.push(createPartWithDuration(notes, 1));
+    partList.push(createPartWithDuration(soundConfig.closingNotes[nestingLevel]));
 }
 
 export function playBlock(nestingLevel: number) {
     let notes = Array.from(soundConfig.basicNotes[nestingLevel].notes);
-    partList.push(createPartWithDuration(notes, 4));
+    partList.push(createPartWithDuration(soundConfig.basicNotes[nestingLevel]));
 }
 
 export function playBetweenStacks() {
-    partList.push(createPartWithDuration([null, null], 4));
-
+    //partList.push(createPartWithDuration([null, null], 4));
 }
 
 function updateInstrument() {
@@ -169,10 +145,10 @@ function updateInstrument() {
     activeInstrument.toDestination();
 }
 
-function updateShift() {
-    const shiftSlider = document.getElementById('shiftSlider') as HTMLInputElement | null;
-    shiftBase = parseInt(shiftSlider?.value || '12', 10);
-}
+// function updateShift() {
+//     const shiftSlider = document.getElementById('shiftSlider') as HTMLInputElement | null;
+//     shiftBase = parseInt(shiftSlider?.value || '12', 10);
+// }
 
 // function updateNotes() {
 //     const openingInput = document.getElementById('openingNotes') as HTMLInputElement | null;
@@ -230,7 +206,7 @@ export function playProgram(programText: string) {
     soundConfig.updateTempo();
     soundConfig.updateNotes();
 
-    updateShift();
+    //updateShift();
     partList = [];
     // Shoves items into the parts list.
     eval(programText);
