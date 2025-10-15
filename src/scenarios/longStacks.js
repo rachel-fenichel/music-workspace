@@ -86,6 +86,14 @@ export const sixStacks = {
             {
                 "x": 100,
                 "y": 100,
+                "icons": {
+                    "comment": {
+                        "text": "This program has multiple stacks, each of which is a simple sequence, scattered across the workspace. Not all are visible at default zoom.",
+                        "pinned": true,
+                        "height": 200,
+                        "width": 200
+                    }
+                },
                 "type": "red_block",
                 "next": stackOfBlocks
             },
