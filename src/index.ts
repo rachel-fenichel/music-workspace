@@ -86,3 +86,40 @@ document.getElementById('play')?.addEventListener('click', () => {
   Tone.start();
   playProgram(codeDiv?.textContent || '');
 });
+
+document.getElementById('opening-notes-header')?.addEventListener('click', () => {
+  toggleAccordion('opening-notes-content', 'opening-notes-icon');
+});
+
+document.getElementById('closing-notes-header')?.addEventListener('click', () => {
+  toggleAccordion('closing-notes-content', 'closing-notes-icon');
+});
+
+document.getElementById('basic-notes-header')?.addEventListener('click', () => {
+  toggleAccordion('basic-notes-content', 'basic-notes-icon');
+});
+// Optionally collapse all groups on load for a cleaner view
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('opening-notes-content')?.classList.add('collapsed');
+  document.getElementById('opening-notes-icon')?.classList.add('collapsed');
+  document.getElementById('closing-notes-content')?.classList.add('collapsed');
+  document.getElementById('closing-notes-icon')?.classList.add('collapsed');
+  document.getElementById('basic-notes-content')?.classList.add('collapsed');
+  document.getElementById('basic-notes-icon')?.classList.add('collapsed');
+});
+// --- Accordion Toggle Function ---
+function toggleAccordion(contentId: string, iconId: string) {
+  const content = document.getElementById(contentId);
+  const icon = document.getElementById(iconId);
+
+  if (content?.classList.contains('collapsed')) {
+    // Expand the section
+    content?.classList.remove('collapsed');
+    icon?.classList.remove('collapsed');
+  } else {
+    // Collapse the section
+    content?.classList.add('collapsed');
+    icon?.classList.add('collapsed');
+  }
+}
+
