@@ -64,32 +64,14 @@ interface PartWithDuration {
 }
 let partList: PartWithDuration[] = [];
 
-function createPartEvents(notes: (string | null)[], sixteenthsDur: number): NoteEvent[] {
-    return notes.map((note, index) => {
-        // Calculate the trigger time for this event in measures:beats:sixteenths format
-        const time = `0:0:${index * sixteenthsDur}`;
-
-        return {
-            time: time,
-            note: note,
-            duration: `0:0:${sixteenthsDur}`
-        };
-    });
-}
-
 function createPartWithDuration(effect: SoundEffect): { part: Tone.Part, duration: string } {
     const partEvents = effect.toPartEvents();
-    //createPartEvents(notes, sixteenthsDur);
     // The callback function fires for each event in the 'partEvents' array
     const part = new Tone.Part<NoteEvent>((time, value) => {
         if (value.note) {
             activeInstrument?.triggerAttackRelease(value.note, value.duration, time)
         }
     }, partEvents);
-
-    // let duration = sixteenthsDur * (notes.length);
-    // let durationString = `0:0:${duration}`;
-
     return { part, duration: effect.getDurationString() };
 }
 
@@ -115,26 +97,19 @@ function playPartsFromList() {
 }
 
 export function playOpening(nestingLevel: number) {
-    let notes = Array.from(soundConfig.openingNotes[nestingLevel].notes);
-    notes.push(null);
-    notes.push(null);
     partList.push(createPartWithDuration(soundConfig.openingNotes[nestingLevel]));
 }
 
 export function playClosing(nestingLevel: number) {
-    let notes = Array.from(soundConfig.closingNotes[nestingLevel].notes);
-    notes.push(null);
-    notes.push(null);
     partList.push(createPartWithDuration(soundConfig.closingNotes[nestingLevel]));
 }
 
 export function playBlock(nestingLevel: number) {
-    let notes = Array.from(soundConfig.basicNotes[nestingLevel].notes);
     partList.push(createPartWithDuration(soundConfig.basicNotes[nestingLevel]));
 }
 
 export function playBetweenStacks() {
-    //partList.push(createPartWithDuration([null, null], 4));
+    // TODO: implement.
 }
 
 function updateInstrument() {
@@ -145,69 +120,15 @@ function updateInstrument() {
     activeInstrument.toDestination();
 }
 
-// function updateShift() {
-//     const shiftSlider = document.getElementById('shiftSlider') as HTMLInputElement | null;
-//     shiftBase = parseInt(shiftSlider?.value || '12', 10);
-// }
-
-// function updateNotes() {
-//     const openingInput = document.getElementById('openingNotes') as HTMLInputElement | null;
-//     openingNotes = parseNotesFromText(openingInput?.value || '');
-//     closingNotes = [...openingNotes].reverse();
-//     const baseInput = document.getElementById('baseNotes') as HTMLInputElement | null;
-//     baseNotes = parseNotesFromText(baseInput?.value || 'C5');
-// }
-// /**
-//  * Parses a raw string of text into an array of valid note strings or nulls.
-//  * Drops any items that cannot be parsed as a musical note.
-//  * @param {string} text - Raw input text (e.g., "C4, E4, skip, null, G5").
-//  * @returns {Array<string | null>} The parsed array.
-//  */
-// function parseNotesFromText(text: string) {
-//     // Split by comma, space, or newline, then trim whitespace, filter out empty strings
-//     const parts = text.split(/[,\s\n]+/).map(part => part.trim()).filter(part => part.length > 0);
-
-//     const parsedNotes = [];
-//     for (const part of parts) {
-//         // Check for explicit "null" text
-//         if (part.toLowerCase() === 'null') {
-//             parsedNotes.push(null);
-//             continue;
-//         }
-
-//         try {
-//             // Use Tone.Midi constructor to attempt validation
-//             // @ts-ignore The Tone.Midi constructor comes from the external Tone.js library.
-//             const midi = new Tone.Midi(part);
-
-//             // A successful construction and a pitch within the usable MIDI range (0-127) is considered valid.
-//             const midiValue = midi.toMidi();
-
-//             if (midiValue >= 0 && midiValue <= 127) {
-//                 // Push the cleaned, original note string for Sampler/Synth use
-//                 parsedNotes.push(part);
-//             } else {
-//                 // Parsed but out of standard range (e.g., 'C-10')
-//                 parsedNotes.push(null);
-//             }
-//         } catch (error) {
-//             // Invalid note string (e.g., 'skip', 'x4')
-//             parsedNotes.push(null);
-//         }
-//     }
-//     return parsedNotes;
-// }
-
 export function playProgram(programText: string) {
     updateInstrument();
     activeInstrument.toDestination();
 
-
     soundConfig.updateTempo();
     soundConfig.updateNotes();
 
-    //updateShift();
     partList = [];
+    
     // Shoves items into the parts list.
     eval(programText);
     playPartsFromList();

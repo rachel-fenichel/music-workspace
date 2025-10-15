@@ -24,7 +24,8 @@ export class SoundEffect {
     }
 
     toPartEvents(): NoteEvent[] {
-        return this.notes.map((note, index) => {
+        const notesList = [...this.notes, null];
+        return notesList.map((note, index) => {
             // Calculate the trigger time for this event in measures:beats:sixteenths format
             const time = `0:0:${index * this.noteDuration}`;
 
@@ -37,7 +38,8 @@ export class SoundEffect {
     }
 
     getDurationString() {
-        return `0:0:${this.noteDuration * this.notes.length}`;
+        // Add one beat for the null at the end of the part.
+        return `0:0:${this.noteDuration * (this.notes.length + 1)}`;
     }
 
     toPartWithDuration(
