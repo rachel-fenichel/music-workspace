@@ -335,6 +335,35 @@ const textBlock = {
   'colour': 225,
 };
 
+const redBlock ={
+  "type": "red_block",
+  "tooltip": "",
+  "helpUrl": "",
+  "message0": "red block",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 345
+};
+
+const purpleBlock = {
+  "type": "purple_block",
+  "tooltip": "",
+  "helpUrl": "",
+  "message0": "purple block with long text",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 270
+};
+      const greenBlock = {
+  "type": "green_block",
+  "tooltip": "",
+  "helpUrl": "",
+  "message0": "green block",
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": 120
+};              
+
 // Create the block definitions for all the JSON-only blocks.
 // This does not register their definitions with Blockly.
 const jsonBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
@@ -347,6 +376,9 @@ const jsonBlocks = Blockly.common.createBlockDefinitionsFromJsonArray([
   writeTextWithoutShadow,
   writeTextWithShadow,
   textBlock,
+  redBlock,
+  purpleBlock,  
+  greenBlock,
 ]);
 
 export const blocks = {

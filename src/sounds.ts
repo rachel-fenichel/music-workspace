@@ -9,6 +9,9 @@ let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 // An octave shift is always +12 semitones in music theory.
 const SEMITONES_PER_OCTAVE = 12;
 let shiftBase = SEMITONES_PER_OCTAVE;
+let openingNotes : (string | null)[] = [];
+let closingNotes : (string | null)[] = [];
+let baseNotes : (string | null)[] = ['C5'];
 
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
@@ -131,25 +134,31 @@ function shiftNotes(notes: (string | null)[], shiftAmount: number): (string | nu
 }
 
 export function playOpening(nestingLevel: number) {
-    let baseNotes = ['C4', 'E4', 'G4', 'C5', null, null];
-    let notes = shiftNotes(baseNotes, nestingLevel);
+    //let baseNotes = openingNotes;//['C4', 'E4', 'G4', 'C5', null, null];
+    let notes = shiftNotes(openingNotes, nestingLevel);
+    notes.push(null);
+    notes.push(null);
     partList.push(createPartWithDuration(notes, 1));
 }
 
 export function playClosing(nestingLevel: number) {
-    let notes = ['C5', 'G4', 'E4', 'C4', null, null];
-    notes = shiftNotes(notes, nestingLevel);
+    //let notes = ['C5', 'G4', 'E4', 'C4', null, null];
+    let notes = shiftNotes(closingNotes, nestingLevel);
+    notes.push(null);
+    notes.push(null);
     partList.push(createPartWithDuration(notes, 1));
 }
 
 export function playBlock(nestingLevel: number) {
-    let notes: (string | null)[] = ['C5'];
-    notes = shiftNotes(notes, nestingLevel);
+    //let notes: (string | null)[] = ['C5'];
+    let notes = shiftNotes(baseNotes, nestingLevel);
     partList.push(createPartWithDuration(notes, 4));
 }
 
 export function playBetweenStacks() {
-    partList.push(createPartWithDuration(['C2', 'E2'], 4));
+    //partList.push(createPartWithDuration(['C2', 'E2'], 4));
+    partList.push(createPartWithDuration([null, null], 4));
+
 }
 
 function updateTempo() {
@@ -171,11 +180,60 @@ function updateShift() {
     shiftBase = parseInt(shiftSlider?.value || '12', 10);
 }
 
+function updateNotes() {
+    const openingInput = document.getElementById('openingNotes') as HTMLInputElement | null;
+    openingNotes = parseNotesFromText(openingInput?.value || '');
+    closingNotes = [...openingNotes].reverse();
+    const baseInput = document.getElementById('baseNotes') as HTMLInputElement | null;
+    baseNotes = parseNotesFromText(baseInput?.value || 'C5');
+}
+/**
+ * Parses a raw string of text into an array of valid note strings or nulls.
+ * Drops any items that cannot be parsed as a musical note.
+ * @param {string} text - Raw input text (e.g., "C4, E4, skip, null, G5").
+ * @returns {Array<string | null>} The parsed array.
+ */
+function parseNotesFromText(text: string) {
+    // Split by comma, space, or newline, then trim whitespace, filter out empty strings
+    const parts = text.split(/[,\s\n]+/).map(part => part.trim()).filter(part => part.length > 0);
+
+    const parsedNotes = [];
+    for (const part of parts) {
+        // Check for explicit "null" text
+        if (part.toLowerCase() === 'null') {
+            parsedNotes.push(null);
+            continue;
+        }
+
+        try {
+            // Use Tone.Midi constructor to attempt validation
+            // @ts-ignore The Tone.Midi constructor comes from the external Tone.js library.
+            const midi = new Tone.Midi(part);
+
+            // A successful construction and a pitch within the usable MIDI range (0-127) is considered valid.
+            const midiValue = midi.toMidi();
+
+            if (midiValue >= 0 && midiValue <= 127) {
+                // Push the cleaned, original note string for Sampler/Synth use
+                parsedNotes.push(part);
+            } else {
+                // Parsed but out of standard range (e.g., 'C-10')
+                parsedNotes.push(null);
+            }
+        } catch (error) {
+            // Invalid note string (e.g., 'skip', 'x4')
+            parsedNotes.push(null);
+        }
+    }
+    return parsedNotes;
+}
+
 export function playProgram(programText: string) {
     activeInstrument.toDestination();
     updateTempo();
     updateInstrument();
     updateShift();
+    updateNotes();
     partList = [];
     // Shoves items into the parts list.
     eval(programText);

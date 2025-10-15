@@ -24,7 +24,7 @@ installColourBlocks();
 const params = new URLSearchParams(window.location.search);
 
 const scenarioParam = params.get('scenario');
-const scenario = scenarioParam ?? 'simpleCircle';
+const scenario = scenarioParam ?? 'longStack';
 
 // Update form inputs to match params, but only after the page is
 // fully loaded as Chrome (at least) tries to restore previous form
