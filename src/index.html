@@ -14,7 +14,7 @@
       <form id="options">
         <div class="control-group">
           <label for="scenario" label="control-label">Scenario:</label>
-          <select name="scenario" id="scenario" onchange="document.forms.options.submit()" class="fancy-select">
+          <select name="scenario" id="scenario" class="fancy-select">
             <option value="longStack">long stack</option>
             <option value="sixStacks">six stacks</option>
             <option value="ifStack">if stacks</option>
@@ -82,7 +82,7 @@
                   <input type="text" id="opening-notes-l4" class="input-field" value="C4, E4, G4, C5">
                 </div>
               </div>
-              <button onclick="handleGroupOneSet('opening-notes-container')" class="set-button">Set</button>
+              <button id="opening-set-button" class="set-button" type="button">Set</button>
             </div>
           </div>
 
@@ -114,7 +114,7 @@
                   <input type="text" id="closing-notes-l4" class="input-field" value="C4, E4, G4, C5">
                 </div>
               </div>
-              <button onclick="handleGroupTwoSet('closing-notes-container')" class="set-button">Set</button>
+              <button id="closing-set-button" type="button" class="set-button">Set</button>
             </div>
           </div>
 
@@ -144,7 +144,7 @@
                   <input type="text" id="basic-notes-l4" class="input-field" value="C5">
                 </div>
               </div>
-              <button onclick="handleGroupThreeSet('basic-notes-container')" class="set-button">Set</button>
+              <button id="basic-set-button" type="button" class="set-button">Set</button>
             </div>
           </div>
 
@@ -178,5 +178,42 @@
     <div id="blocklyDiv"></div>
   </div>
 </body>
+<script>
+        /**
+         * Dedicated Callback Function for Group 1 (User Profile)
+         * @param {string} containerId - The ID of the parent container element.
+         */
+        function handleGroupOneSet(containerId) {
+            //const values = getGroupValues(containerId);
+            console.groupCollapsed(`✅ Group 1 SET - Data Processed`);
+            console.log(`[Function: handleGroupOneSet] Executed.`);
+            console.table(values);
+            console.groupEnd();
+        }
 
+        /**
+         * Dedicated Callback Function for Group 2 (Project Parameters)
+         * @param {string} containerId - The ID of the parent container element.
+         */
+        function handleGroupTwoSet(containerId) {
+           // const values = getGroupValues(containerId);
+            console.groupCollapsed(`✅ Group 2 SET - Data Processed`);
+            console.log(`[Function: handleGroupTwoSet] Executed.`);
+            console.table(values);
+            console.groupEnd();
+        }
+
+        /**
+         * Dedicated Callback Function for Group 3 (System Metrics)
+         * @param {string} containerId - The ID of the parent container element.
+         */
+        function handleGroupThreeSet(containerId) {
+           // const values = getGroupValues(containerId);
+            console.groupCollapsed(`✅ Group 3 SET - Data Processed`);
+            console.log(`[Function: handleGroupThreeSet] Executed.`);
+            console.table(values);
+            console.groupEnd();
+        }
+        
+    </script>
 </html>

@@ -38,7 +38,7 @@ window.addEventListener('load', () => {
 // Set up UI elements and inject Blockly
 const codeDiv = document.getElementById('generatedCode')?.firstChild;
 const blocklyDiv = document.getElementById('blocklyDiv');
-const selectElement = document.getElementById('instrumentSelect');
+const selectElement = document.getElementById('instrumentSelect') as HTMLSelectElement;
 
 if (!blocklyDiv) {
   throw new Error(`div with id 'blocklyDiv' not found`);
@@ -81,6 +81,13 @@ if (ws) {
     genCode();
   });
 }
+
+document.getElementById('scenario')?.addEventListener('change', () => {
+  if (ws) {
+    loadTestBlocks(ws,  (document.getElementById('scenario') as HTMLSelectElement).value);
+    genCode();
+  }
+});
 
 document.getElementById('play')?.addEventListener('click', () => {
   Tone.start();

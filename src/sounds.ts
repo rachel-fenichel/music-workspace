@@ -8,7 +8,7 @@ let synth: Tone.PolySynth = createPianoSynth();
 let sampler: Tone.Sampler = piano;
 let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
-let soundConfig : SoundConfig = new SoundConfig();
+let soundConfig: SoundConfig = new SoundConfig();
 
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
@@ -97,15 +97,18 @@ function playPartsFromList() {
 }
 
 export function playOpening(nestingLevel: number) {
-    partList.push(createPartWithDuration(soundConfig.openingNotes[nestingLevel]));
+    partList.push(
+        createPartWithDuration(soundConfig.getEffect('opening', nestingLevel)));
 }
 
 export function playClosing(nestingLevel: number) {
-    partList.push(createPartWithDuration(soundConfig.closingNotes[nestingLevel]));
+    partList.push(
+        createPartWithDuration(soundConfig.getEffect('closing', nestingLevel)));
 }
 
 export function playBlock(nestingLevel: number) {
-    partList.push(createPartWithDuration(soundConfig.basicNotes[nestingLevel]));
+    partList.push(
+        createPartWithDuration(soundConfig.getEffect('basic', nestingLevel)));
 }
 
 export function playBetweenStacks() {
