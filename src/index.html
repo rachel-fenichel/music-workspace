@@ -51,97 +51,71 @@
           <input type="range" id="tempoSlider" min="40" max="240" value="150" class="fancy-slider">
         </div>
 
-
-        <!-- Vertical Accordion Container -->
-        <div class="accordion-container">
-
-          <!-- Group 1 -->
-          <div id="opening-notes-container" class="group-container">
-            <div id="opening-notes-header" class="group-header-row">
-              <label class="group-header">Edit Opening Notes</label>
-              <span id="opening-notes-icon" class="toggle-icon">⌄</span>
+        <div id="notes-container" class="group-container">
+          <div id="notes-header" class="group-header-row">
+            <label class="group-header">Edit Sound Effects</label>
+            <span id="notes-icon" class="toggle-icon">⌄</span>
+          </div>
+          <!-- Collapsible Content Area -->
+          <div id="notes-content" class="collapsible-content">
+            <div class="input-wrapper">
+              <div class="group-header">Opening Notes</div>
+              <div class="input-group-row">
+                <label for="opening-notes-l1" class="control-label">Level 1:</label>
+                <input type="text" id="opening-notes-l1" class="input-field" value="C4, E4, G4">
+              </div>
+              <div class="input-group-row">
+                <label for="opening-notes-l2" class="control-label">Level 2:</label>
+                <input type="text" id="opening-notes-l2" class="input-field" value="E4, G4, C5">
+              </div>
+              <div class="input-group-row">
+                <label for="opening-notes-l3" class="control-label">Level 3:</label>
+                <input type="text" id="opening-notes-l3" class="input-field" value="G4, C5, E5">
+              </div>
+              <div class="input-group-row">
+                <label for="opening-notes-l4" class="control-label">Level 4:</label>
+                <input type="text" id="opening-notes-l4" class="input-field" value="C5, E5, G5">
+              </div>
             </div>
-            <!-- Collapsible Content Area -->
-            <div id="opening-notes-content" class="collapsible-content">
-              <div class="input-wrapper">
-                <div class="input-group-row">
-                  <label for="opening-notes-l1" class="control-label">Level 1:</label>
-                  <input type="text" id="opening-notes-l1" class="input-field" value="C4, E4, G4">
-                </div>
-                <div class="input-group-row">
-                  <label for="opening-notes-l2" class="control-label">Level 2:</label>
-                  <input type="text" id="opening-notes-l2" class="input-field" value="E4, G4, C5">
-                </div>
-                <div class="input-group-row">
-                  <label for="opening-notes-l3" class="control-label">Level 3:</label>
-                  <input type="text" id="opening-notes-l3" class="input-field" value="G4, C5, E5">
-                </div>
-                <div class="input-group-row">
-                  <label for="opening-notes-l4" class="control-label">Level 4:</label>
-                  <input type="text" id="opening-notes-l4" class="input-field" value="C5, E5, G5">
-                </div>
+            <div class="input-wrapper">
+              <div class="group-header">Closing Notes</div>
+              <div class="input-group-row">
+                <label for="closing-notes-l1" class="control-label">Level 1:</label>
+                <input type="text" id="closing-notes-l1" class="input-field" value="G4, E4, C4">
+              </div>
+              <div class="input-group-row">
+                <label for="closing-notes-l2" class="control-label">Level 2:</label>
+                <input type="text" id="closing-notes-l2" class="input-field" value="C5, G4, E4">
+              </div>
+              <div class="input-group-row">
+                <label for="closing-notes-l3" class="control-label">Level 3:</label>
+                <input type="text" id="closing-notes-l3" class="input-field" value="E5, C5, G4">
+              </div>
+              <div class="input-group-row">
+                <label for="closing-notes-l4" class="control-label">Level 4:</label>
+                <input type="text" id="closing-notes-l4" class="input-field" value="G5, E5, C5">
+              </div>
+            </div>
+            <div class="input-wrapper">
+              <div class="group-header">Basic Notes</div>
+              <div class="input-group-row">
+                <label for="basic-notes-l1" class="control-label">Level 1:</label>
+                <input type="text" id="basic-notes-l1" class="input-field" value="C4">
+              </div>
+              <div class="input-group-row">
+                <label for="basic-notes-l2" class="control-label">Level 2:</label>
+                <input type="text" id="basic-notes-l2" class="input-field" value="E4">
+              </div>
+              <div class="input-group-row">
+                <label for="basic-notes-l3" class="control-label">Level 3:</label>
+                <input type="text" id="basic-notes-l3" class="input-field" value="G4">
+              </div>
+              <div class="input-group-row">
+                <label for="basic-notes-l4" class="control-label">Level 4:</label>
+                <input type="text" id="basic-notes-l4" class="input-field" value="C5">
               </div>
             </div>
           </div>
-
-          <!-- Group 2 -->
-          <div id="closing-notes-container" class="group-container">
-            <div id="closing-notes-header" class="group-header-row">
-              <label class="group-header">Edit Closing Notes</label>
-              <span id="closing-notes-icon" class="toggle-icon">⌄</span>
-            </div>
-            <!-- Collapsible Content Area -->
-            <div id="closing-notes-content" class="collapsible-content">
-              <div class="input-wrapper">
-                <div class="input-group-row">
-                  <label for="closing-notes-l1" class="control-label">Level 1:</label>
-                  <input type="text" id="closing-notes-l1" class="input-field" value="G4, E4, C4">
-                </div>
-                <div class="input-group-row">
-                  <label for="closing-notes-l2" class="control-label">Level 2:</label>
-                  <input type="text" id="closing-notes-l2" class="input-field" value="C5, G4, E4">
-                </div>
-                <div class="input-group-row">
-                  <label for="closing-notes-l3" class="control-label">Level 3:</label>
-                  <input type="text" id="closing-notes-l3" class="input-field" value="E5, C5, G4">
-                </div>
-                <div class="input-group-row">
-                  <label for="closing-notes-l4" class="control-label">Level 4:</label>
-                  <input type="text" id="closing-notes-l4" class="input-field" value="G5, E5, C5">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Group 3 -->
-          <div id="basic-notes-container" class="group-container">
-            <div id="basic-notes-header" class="group-header-row">
-              <label class="group-header">Edit Basic Notes</label>
-              <span id="basic-notes-icon" class="toggle-icon">⌄</span>
-            </div>
-            <!-- Collapsible Content Area -->
-            <div id="basic-notes-content" class="collapsible-content">
-              <div class="input-wrapper">
-                <div class="input-group-row">
-                  <label for="basic-notes-l1" class="control-label">Level 1:</label>
-                  <input type="text" id="basic-notes-l1" class="input-field" value="C4">
-                </div>
-                <div class="input-group-row">
-                  <label for="basic-notes-l2" class="control-label">Level 2:</label>
-                  <input type="text" id="basic-notes-l2" class="input-field" value="E4">
-                </div>
-                <div class="input-group-row">
-                  <label for="basic-notes-l3" class="control-label">Level 3:</label>
-                  <input type="text" id="basic-notes-l3" class="input-field" value="G4">
-                </div>
-                <div class="input-group-row">
-                  <label for="basic-notes-l4" class="control-label">Level 4:</label>
-                  <input type="text" id="basic-notes-l4" class="input-field" value="C5">
-                </div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </form>
       <pre id="generatedCode"><code></code></pre>

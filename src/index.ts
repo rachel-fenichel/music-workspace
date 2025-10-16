@@ -84,7 +84,7 @@ if (ws) {
 
 document.getElementById('scenario')?.addEventListener('change', () => {
   if (ws) {
-    loadTestBlocks(ws,  (document.getElementById('scenario') as HTMLSelectElement).value);
+    loadTestBlocks(ws, (document.getElementById('scenario') as HTMLSelectElement).value);
     genCode();
   }
 });
@@ -94,30 +94,9 @@ document.getElementById('play')?.addEventListener('click', () => {
   playProgram(codeDiv?.textContent || '');
 });
 
-document.getElementById('opening-notes-header')?.addEventListener('click', () => {
-  toggleAccordion('opening-notes-content', 'opening-notes-icon');
-});
-
-document.getElementById('closing-notes-header')?.addEventListener('click', () => {
-  toggleAccordion('closing-notes-content', 'closing-notes-icon');
-});
-
-document.getElementById('basic-notes-header')?.addEventListener('click', () => {
-  toggleAccordion('basic-notes-content', 'basic-notes-icon');
-});
-// Optionally collapse all groups on load for a cleaner view
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('opening-notes-content')?.classList.add('collapsed');
-  document.getElementById('opening-notes-icon')?.classList.add('collapsed');
-  document.getElementById('closing-notes-content')?.classList.add('collapsed');
-  document.getElementById('closing-notes-icon')?.classList.add('collapsed');
-  document.getElementById('basic-notes-content')?.classList.add('collapsed');
-  document.getElementById('basic-notes-icon')?.classList.add('collapsed');
-});
-// --- Accordion Toggle Function ---
-function toggleAccordion(contentId: string, iconId: string) {
-  const content = document.getElementById(contentId);
-  const icon = document.getElementById(iconId);
+document.getElementById('notes-header')?.addEventListener('click', () => {
+  const content = document.getElementById('notes-content');
+  const icon = document.getElementById('notes-icon');
 
   if (content?.classList.contains('collapsed')) {
     // Expand the section
@@ -128,5 +107,10 @@ function toggleAccordion(contentId: string, iconId: string) {
     content?.classList.add('collapsed');
     icon?.classList.add('collapsed');
   }
-}
+});
 
+// Optionally collapse all groups on load for a cleaner view
+// document.addEventListener('DOMContentLoaded', () => {
+//   document.getElementById('notes-content')?.classList.add('collapsed');
+//   document.getElementById('notes-icon')?.classList.add('collapsed');
+// });
