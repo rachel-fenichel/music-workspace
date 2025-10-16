@@ -69,38 +69,7 @@ export class SoundConfig {
             this.setNotesFromDom(Phrase.Basic, 4);
         });
     }
-
-    setOpening(effect: SoundEffect, level: number) {
-        while (level > this.openingNotes.length) {
-            this.openingNotes.push(effect);
-        }
-
-        this.openingNotes[level] = effect;
-    }
-
-    setClosing(effect: SoundEffect, level: number) {
-        while (level > this.closingNotes.length) {
-            this.closingNotes.push(effect);
-        }
-
-        this.closingNotes[level] = effect;
-    }
-
-    setBasic(effect: SoundEffect, level: number) {
-        while (level > this.basicNotes.length) {
-            this.basicNotes.push(effect);
-        }
-
-        this.basicNotes[level] = effect;
-    }
-
-    getOpeningNotes(level: number) {
-        if (level < this.openingNotes.length) {
-            return this.openingNotes[level];
-        }
-        return Array.from(this.openingNotes[0].notes);
-    }
-
+    
     updateTempo() {
         const slider = document.getElementById('tempoSlider') as HTMLInputElement | null;
         this.tempo = slider ? parseInt(slider.value) : this.TEMPO_DEFAULT;
