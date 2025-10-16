@@ -38,44 +38,13 @@ code {
   width: 400px;
   flex: 0 0 400px;
   overflow: auto;
-  margin: 1rem;
+  margin: 0 1rem 0 1rem;
 }
 
 #generatedCode {
   height: 50%;
   background-color: rgb(247, 240, 228);
   display: none;
-}
-
-#play {
-  background-color: #4f46e5;
-  /* Indigo-600 equivalent */
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
-  display: block;
-  /* Make it take full width on small screens */
-  width: 100%;
-  margin-bottom: 1.5rem;
-  /* Equivalent to mb-6 */
-}
-
-#play:hover {
-  background-color: #4338ca;
-  /* Indigo-700 equivalent */
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
-}
-
-#play:active {
-  background-color: #3730a3;
-  /* Indigo-800 equivalent */
-  transform: translateY(1px);
 }
 
 /* Raw CSS for the Shift Slider */
@@ -265,7 +234,7 @@ code {
 .group-container {
   margin-bottom: .5rem;
   /* mb-6 */
-  padding: .5rem .75rem .5rem .75rem;
+  padding: .5rem .75rem .75rem .75rem;
   /* p-4 */
   background-color: #f0f9ff;
   /* bg-indigo-50 */
@@ -306,6 +275,7 @@ code {
   font-size: 1.5rem;
   line-height: 1;
   transition: transform 0.3s ease;
+  transform: translateY(-5px);
 }
 
 .toggle-icon.collapsed {
@@ -326,4 +296,43 @@ code {
   max-height: 0;
   padding-top: 0;
   margin-bottom: 0;
+}
+
+.playback-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 auto 8px auto;
+  /* Center it and add space */
+  padding: 10px 25px;
+  background-color: #1d4ed8;
+  /* Blue for Play state */
+  color: white;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  font-size: 1rem;
+}
+
+.playback-button:hover {
+  background-color: #1e40af;
+  transform: translateY(-1px);
+}
+
+/* Style change for Stop state (when playing) */
+.playback-button.playing {
+  background-color: #ef4444;
+  /* Red for Stop state */
+}
+
+.playback-button.playing:hover {
+  background-color: #b91c1c;
+}
+
+.playback-icon {
+  line-height: 1;
 }

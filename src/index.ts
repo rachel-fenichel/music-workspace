@@ -9,7 +9,7 @@ import { save, load } from './serialization';
 import { toolbox } from './toolbox';
 import './index.css';
 import { musicGenerator } from './generators/music';
-import { playProgram } from './sounds';
+import { togglePlayback } from './sounds';
 // @ts-expect-error No types in js file
 import { blocks } from './blocks/p5_blocks';
 // @ts-expect-error No types in js file
@@ -24,7 +24,7 @@ installColourBlocks();
 const params = new URLSearchParams(window.location.search);
 
 const scenarioParam = params.get('scenario');
-const scenario = scenarioParam ?? 'longStack';
+const scenario = scenarioParam ?? 'ifStack';
 
 // Update form inputs to match params, but only after the page is
 // fully loaded as Chrome (at least) tries to restore previous form
@@ -89,9 +89,9 @@ document.getElementById('scenario')?.addEventListener('change', () => {
   }
 });
 
-document.getElementById('play')?.addEventListener('click', () => {
+document.getElementById('playback-button')?.addEventListener('click', () => {
   Tone.start();
-  playProgram(codeDiv?.textContent || '');
+  togglePlayback();
 });
 
 document.getElementById('notes-header')?.addEventListener('click', () => {
@@ -108,6 +108,8 @@ document.getElementById('notes-header')?.addEventListener('click', () => {
     icon?.classList.add('collapsed');
   }
 });
+
+
 
 // Optionally collapse all groups on load for a cleaner view
 // document.addEventListener('DOMContentLoaded', () => {

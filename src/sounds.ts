@@ -9,6 +9,7 @@ let sampler: Tone.Sampler = piano;
 let activeInstrument: Tone.PolySynth | Tone.Sampler = sampler;
 
 let soundConfig: SoundConfig = new SoundConfig();
+let isPlaying = false;
 
 /**
  * Initializes and configures the Tone.PolySynth for a piano-like sound.
@@ -123,7 +124,7 @@ function updateInstrument() {
     activeInstrument.toDestination();
 }
 
-function cancelPlay() {
+export function cancelPlay() {
     let transport = Tone.getTransport();
     transport.stop();
     // Get rid of old list of events.
@@ -131,7 +132,10 @@ function cancelPlay() {
     transport.position = 0; // Reset position for next play.
 }
 
-export function playProgram(programText: string) {
+export function playProgram() {
+    const codeDiv = document.getElementById('generatedCode')?.firstChild;
+    let programText = codeDiv?.textContent || '';
+
     cancelPlay();
     updateInstrument();
     activeInstrument.toDestination();
@@ -144,4 +148,30 @@ export function playProgram(programText: string) {
     // Shoves items into the parts list.
     eval(programText);
     playPartsFromList();
+}
+
+/**
+ * Toggles the playback state, calls the appropriate sound function,
+ * and updates the button's text and appearance.
+ */
+export function togglePlayback() {
+    const button = document.getElementById('playback-button') as HTMLElement;
+    const icon = document.getElementById('playback-icon') as HTMLElement;
+    const text = document.getElementById('playback-text') as HTMLElement;
+
+
+    if (!isPlaying) {
+        // Transition to PLAYING (Stop state)
+        playProgram();
+        button.classList.add('playing');
+        icon.textContent = '■'; // Unicode for Stop block
+        text.textContent = 'Stop';
+    } else {
+        // Transition to STOPPED (Play state)
+        cancelPlay();
+        button.classList.remove('playing');
+        icon.textContent = '▶'; // Unicode for Play triangle
+        text.textContent = 'Play';
+    }
+    isPlaying = !isPlaying;
 }
